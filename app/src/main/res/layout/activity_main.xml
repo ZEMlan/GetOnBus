@@ -11,15 +11,16 @@
         android:layout_height="wrap_content"
         android:background="@color/backgroundColor"
         android:fitsSystemWindows="true"
-        android:gravity="top"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp"
+        android:translationZ="0.1dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@null"
-            app:titleTextColor="@color/primaryColor" />
+            app:titleTextColor="@color/primaryColor"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
