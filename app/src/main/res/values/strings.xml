@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Скорей в автобус!</string>
+    <string name="empty_string"> </string>
+    <string name="maps">MAPS</string>
 </resources>
