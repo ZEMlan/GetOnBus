@@ -1,4 +1,4 @@
-package ru.zemlyanaya.getonbus.rooting
+package ru.zemlyanaya.getonbus.routing
 
 import android.content.Context
 import android.net.Uri
@@ -7,9 +7,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_rooting.view.*
 
 import ru.zemlyanaya.getonbus.R
+import ru.zemlyanaya.getonbus.database.FavRoute
 
 
 private const val ARG_A = "a"
@@ -18,14 +22,22 @@ private const val ARG_B = "b"
 /**
  * A simple [Fragment] subclass.
  * Activities that contain this fragment must implement the
- * [RootingFragment.OnFragmentInteractionListener] interface
+ * [RoutingFragment.OnFragmentInteractionListener] interface
  * to handle interaction events.
- * Use the [RootingFragment.newInstance] factory method to
+ * Use the [RoutingFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class RootingFragment : Fragment() {
+class RoutingFragment : Fragment() {
     private var a: String? = null
     private var b: String? = null
+
+    private var favRoutes: ArrayList<FavRoute>? = arrayListOf(
+        FavRoute("На ЮнIT", "Малопрудная, 5", null),
+        FavRoute("Домой", "Домашняя, 66", null)
+    )
+
+    private lateinit var adapter: favRoutesRecyclerViewAdapter
+    private lateinit var recyclerView: RecyclerView
 
     private var listener: OnFragmentInteractionListener? = null
 
@@ -42,6 +54,18 @@ class RootingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val layout = inflater.inflate(R.layout.fragment_rooting, container, false)
+        adapter = favRoutesRecyclerViewAdapter()
+        recyclerView = layout.favRecyclerView
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(layout.context)
+        adapter.setData(favRoutes as ArrayList<FavRoute>)
+
+        val itemAnimator = DefaultItemAnimator()
+        itemAnimator.addDuration = 400
+        itemAnimator.removeDuration = 400
+        itemAnimator.moveDuration = 400
+
+        recyclerView.itemAnimator = itemAnimator
         return layout
     }
 
@@ -69,11 +93,6 @@ class RootingFragment : Fragment() {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
      */
     interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
@@ -91,7 +110,7 @@ class RootingFragment : Fragment() {
          */
         @JvmStatic
         fun newInstance(a: String, b: String) =
-            RootingFragment().apply {
+            RoutingFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_A, a)
                     putString(ARG_B, b)

@@ -1,6 +1,5 @@
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
@@ -8,6 +7,8 @@
         <item name="android:background">@color/backgroundColor</item>
         <item name="android:statusBarColor">@color/backgroundColor</item>
         <item name="colorControlHighlight">@color/rippleColor</item>
+        <item name="android:textViewStyle">@style/AppTheme.TextAppearance</item>
+        <item name="android:textAppearance">@style/AppTheme.TextAppearance</item>
     </style>
 
     <style name="AppTheme.InputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -15,6 +16,12 @@
         <item name="boxCornerRadiusBottomStart">8dp</item>
         <item name="boxCornerRadiusTopEnd">8dp</item>
         <item name="boxCornerRadiusTopStart">8dp</item>
+    </style>
+
+    <style name="AppTheme.TextAppearance" parent="Widget.MaterialComponents.TextView">
+        <item name="android:fontFamily">@font/roboto_mono</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
 </resources>

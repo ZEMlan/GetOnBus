@@ -8,10 +8,10 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import kotlinx.android.synthetic.main.head_bar.*
-import ru.zemlyanaya.getonbus.rooting.RootingFragment
+import ru.zemlyanaya.getonbus.routing.RoutingFragment
 
 
-class MainActivity : FragmentActivity(), RootingFragment.OnFragmentInteractionListener {
+class MainActivity : FragmentActivity(), RoutingFragment.OnFragmentInteractionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +36,7 @@ class MainActivity : FragmentActivity(), RootingFragment.OnFragmentInteractionLi
         label.paint.shader = textShader
 
         supportFragmentManager.beginTransaction()
-            .replace(R.id.frame, RootingFragment())
+            .replace(R.id.frame, RoutingFragment())
             .commitAllowingStateLoss()
     }
 

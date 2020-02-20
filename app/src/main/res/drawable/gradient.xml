@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--  gradient background for buttons -->
+    <gradient
+        android:startColor="#3C6DFF"
+        android:centerColor="#6592FF"
+        android:endColor="#99BBFF"
+        android:angle="270"/>
+    <corners android:radius="8dp"/>
+</shape>

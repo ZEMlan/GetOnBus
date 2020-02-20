@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".rooting.RootingFragment">
+    tools:context=".routing.RoutingFragment">
 
 
     <TextView
@@ -12,9 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:fontFamily="@font/roboto_mono"
         android:text="A"
-        android:textColor="@color/textColor"
         android:textSize="26sp"
         app:layout_constraintBottom_toBottomOf="@+id/inputLayoutA"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,9 +50,7 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_mono"
         android:text="B"
-        android:textColor="@color/textColor"
         android:textSize="26sp"
         app:layout_constraintBottom_toBottomOf="@+id/inputLayoutB"
         app:layout_constraintStart_toStartOf="@id/textView"
@@ -91,7 +87,7 @@
         android:id="@+id/butGo"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginTop="42dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/gradient"
         android:fontFamily="@font/roboto_mono_bold"
         android:letterSpacing="0.13"
@@ -102,5 +98,31 @@
         app:layout_constraintEnd_toEndOf="@+id/inputLayoutB"
         app:layout_constraintStart_toStartOf="@+id/textView1"
         app:layout_constraintTop_toBottomOf="@+id/inputLayoutB" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="54dp"
+        android:foregroundTint="@color/rippleColor"
+        android:text="Пройденные приключения"
+        android:textSize="20sp"
+        android:theme="@style/AppTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/butGo" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/favRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        tools:itemCount="4"
+        tools:listitem="@layout/fav_route_card" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
