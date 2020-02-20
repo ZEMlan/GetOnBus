@@ -4,21 +4,24 @@ import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.graphics.Shader.TileMode
+import android.net.Uri
+import android.opengl.Visibility
 import android.os.Bundle
-import android.text.TextPaint
-import androidx.appcompat.app.AppCompatActivity
+import android.view.View
+import androidx.fragment.app.FragmentActivity
 import kotlinx.android.synthetic.main.head_bar.*
+import ru.zemlyanaya.getonbus.rooting.RootingFragment
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : FragmentActivity(), RootingFragment.OnFragmentInteractionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initUI()
+        initHeader()
     }
 
-    private fun initUI(){
+    private fun initHeader(){
         val textShader: Shader = LinearGradient(
             0f,
             0f,
@@ -33,5 +36,16 @@ class MainActivity : AppCompatActivity() {
             TileMode.CLAMP
         )
         label.paint.shader = textShader
+
+        butProfile.visibility = View.VISIBLE
+        butMap.visibility = View.VISIBLE
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.frame, RootingFragment())
+            .commitAllowingStateLoss()
+    }
+
+    override fun onFragmentInteraction(uri: Uri) {
+        TODO("not implemented")
     }
 }
