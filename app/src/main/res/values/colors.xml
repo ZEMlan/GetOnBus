@@ -4,10 +4,10 @@
     <color name="textColor">#1A1B23</color>
     <color name="textAccentColor">#4173FC</color>
     <color name="primaryColor">#699BFE</color>
-    <color name="primaryLightColor">#8EADF1</color>
+    <color name="primaryLightColor">#8CABEA</color>
     <color name="primaryDarkColor">#3C6FFA</color>
     <color name="secondaryColor">#2E5EFD</color>
     <color name="secondaryDarkColor">#001B66</color>
-    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#8EADF1</color>
+    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#ADC2F0</color>
     <color name="rippleColor">#C3D3EE</color>
 </resources>

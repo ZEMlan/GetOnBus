@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.fragment_rooting.view.*
 
 import ru.zemlyanaya.getonbus.R
 
@@ -40,7 +41,8 @@ class RootingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_rooting, container, false)
+        val layout = inflater.inflate(R.layout.fragment_rooting, container, false)
+        return layout
     }
 
     // TODO: Rename method, update argument and hook method into UI event

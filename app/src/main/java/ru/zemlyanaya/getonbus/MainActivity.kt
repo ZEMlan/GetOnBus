@@ -5,9 +5,7 @@ import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.graphics.Shader.TileMode
 import android.net.Uri
-import android.opengl.Visibility
 import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.FragmentActivity
 import kotlinx.android.synthetic.main.head_bar.*
 import ru.zemlyanaya.getonbus.rooting.RootingFragment
@@ -36,9 +34,6 @@ class MainActivity : FragmentActivity(), RootingFragment.OnFragmentInteractionLi
             TileMode.CLAMP
         )
         label.paint.shader = textShader
-
-        butProfile.visibility = View.VISIBLE
-        butMap.visibility = View.VISIBLE
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.frame, RootingFragment())
