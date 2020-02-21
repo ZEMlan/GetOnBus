@@ -10,15 +10,15 @@ import kotlinx.android.synthetic.main.fav_route_card.view.*
 import ru.zemlyanaya.getonbus.R
 import ru.zemlyanaya.getonbus.database.FavRoute
 
-class favRoutesRecyclerViewAdapter internal constructor():
-    RecyclerView.Adapter<favRoutesRecyclerViewAdapter.RouteCardViewHolder>() {
+class FavRoutesRecyclerViewAdapter internal constructor():
+    RecyclerView.Adapter<FavRoutesRecyclerViewAdapter.RouteCardViewHolder>() {
 
     var favRoutes = ArrayList<FavRoute>()
 
 
     inner class RouteCardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val routeName: TextView = itemView.routeName
-        val routeDestination: TextView = itemView.routeDestion
+        val routeDestination: TextView = itemView.routeDestination
         val routeIcon: ImageButton = itemView.routeIcon
     }
 

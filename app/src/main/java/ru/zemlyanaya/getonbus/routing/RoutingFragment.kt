@@ -36,7 +36,7 @@ class RoutingFragment : Fragment() {
         FavRoute("Домой", "Домашняя, 66", null)
     )
 
-    private lateinit var adapter: favRoutesRecyclerViewAdapter
+    private lateinit var adapter: FavRoutesRecyclerViewAdapter
     private lateinit var recyclerView: RecyclerView
 
     private var listener: OnFragmentInteractionListener? = null
@@ -54,7 +54,7 @@ class RoutingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val layout = inflater.inflate(R.layout.fragment_rooting, container, false)
-        adapter = favRoutesRecyclerViewAdapter()
+        adapter = FavRoutesRecyclerViewAdapter()
         recyclerView = layout.favRecyclerView
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(layout.context)

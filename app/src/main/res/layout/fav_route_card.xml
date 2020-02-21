@@ -25,14 +25,13 @@
                 android:layout_marginTop="6dp"
                 android:background="@android:color/transparent"
                 android:clickable="false"
-                android:focusable="false"
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_heart"
                 android:tint="@color/primaryColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/routeName" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/routeName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -43,8 +42,8 @@
                 app:layout_constraintStart_toEndOf="@+id/routeIcon"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/routeDestion"
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/routeDestination"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Route destination"
