@@ -90,6 +90,8 @@
         android:layout_marginTop="40dp"
         android:background="@drawable/gradient"
         android:fontFamily="@font/roboto_family"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
         android:letterSpacing="0.13"
         android:text="Поехали"
         android:textColor="@color/backgroundColor"
@@ -97,30 +99,78 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/inputLayoutB"
         app:layout_constraintStart_toStartOf="@+id/textView1"
-        app:layout_constraintTop_toBottomOf="@+id/inputLayoutB" />
+        app:layout_constraintTop_toBottomOf="@+id/inputLayoutB"
+        app:rippleColor="@color/rippleColor" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="54dp"
-        android:text="Пройденные приключения"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/butGo" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/favRecyclerView"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/favLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="54dp"
+        android:orientation="vertical"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        tools:itemCount="4"
-        tools:listitem="@layout/fav_route_card" />
+        app:layout_constraintTop_toBottomOf="@+id/butGo">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Пройденные приключения"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@+id/favRecyclerView"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/favFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/primaryColor"
+            android:clickable="true"
+            android:elevation="4dp"
+            android:focusable="true"
+            app:fabSize="auto"
+            app:layout_constraintBottom_toBottomOf="@+id/favRecyclerView"
+            app:layout_constraintEnd_toEndOf="@+id/favRecyclerView"
+            app:rippleColor="@color/rippleColor"
+            app:srcCompat="@drawable/ic_plus"
+            app:tint="@color/backgroundColor" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/favRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            tools:itemCount="4"
+            tools:listitem="@layout/fav_route_card" >
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/routesLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="54dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/butGo">
+
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <!--  gradient background for buttons -->
-    <gradient
-        android:startColor="#3C6DFF"
-        android:centerColor="#6592FF"
-        android:endColor="#99BBFF"
-        android:angle="270"/>
-    <corners android:radius="8dp"/>
-</shape>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/rippleColor">
+    <item android:id="@android:id/mask">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/rippleColor" />
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+
+    <item android:id="@android:id/background">
+        <shape>
+        <!--  gradient background for buttons -->
+        <gradient
+            android:startColor="#3C6DFF"
+            android:centerColor="#6592FF"
+            android:endColor="#99BBFF"
+            android:angle="270"/>
+        <corners android:radius="8dp"/>
+        </shape>
+    </item>
+</ripple>
