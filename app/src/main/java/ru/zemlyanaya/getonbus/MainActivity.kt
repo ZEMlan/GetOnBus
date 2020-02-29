@@ -6,8 +6,12 @@ import android.graphics.Shader
 import android.graphics.Shader.TileMode
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentTransaction
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.head_bar.*
+import ru.zemlyanaya.getonbus.about.AboutFragment
 import ru.zemlyanaya.getonbus.routing.RoutingFragment
 
 
@@ -34,13 +38,47 @@ class MainActivity : FragmentActivity(), RoutingFragment.OnFragmentInteractionLi
             TileMode.CLAMP
         )
         label.paint.shader = textShader
+        label.setOnClickListener { showAboutFragment() }
 
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.frame, RoutingFragment())
-            .commitAllowingStateLoss()
+        butProfile.setOnClickListener { showProfileFragment() }
+        butMap.setOnClickListener { showMapFragment() }
+
+        showRouteFragment()
     }
 
     override fun onFragmentInteraction(uri: Uri) {
         TODO("not implemented")
+    }
+
+    private fun showMapFragment(){}
+
+    private fun showProfileFragment(){}
+
+    override fun onBackPressed() {
+        val f = supportFragmentManager.findFragmentById(R.id.frame)
+        if (f !is RoutingFragment) {
+            supportFragmentManager.beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                .replace(R.id.frame, RoutingFragment())
+                .commitAllowingStateLoss()
+            header.visibility = View.VISIBLE
+        }
+    }
+
+    private fun showAboutFragment(){
+        supportFragmentManager.beginTransaction()
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            .replace(R.id.frame, AboutFragment())
+            .addToBackStack(null)
+            .commitAllowingStateLoss()
+        header.visibility = View.GONE
+
+    }
+
+    private fun showRouteFragment(){
+        header.visibility = View.VISIBLE
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.frame, RoutingFragment())
+            .commitAllowingStateLoss()
     }
 }

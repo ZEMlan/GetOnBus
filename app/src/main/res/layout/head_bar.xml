@@ -45,6 +45,7 @@
         android:clickable="true"
         android:focusable="true"
         android:letterSpacing="0.23"
+        android:fontFamily="@font/roboto_family"
         android:text="@string/maps"
         android:textAlignment="center"
         android:textSize="38sp"

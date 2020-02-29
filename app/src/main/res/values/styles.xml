@@ -4,7 +4,7 @@
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorAccent">@color/textAccentColor</item>
-        <item name="android:background">@color/backgroundColor</item>
+        <item name="android:fontFamily">monospace</item>
         <item name="android:statusBarColor">@color/backgroundColor</item>
         <item name="colorControlHighlight">@color/rippleColor</item>
         <item name="android:textViewStyle">@style/AppTheme.TextViewStyle</item>
@@ -18,10 +18,10 @@
         <item name="boxCornerRadiusTopStart">8dp</item>
     </style>
 
-    <style name="AppTheme.TextViewStyle">
-        <item name="android:fontFamily">@font/roboto_family</item>
+    <style name="AppTheme.TextViewStyle" parent="Widget.MaterialComponents.TextView">
         <item name="android:textColor">@color/textColor</item>
         <item name="android:textSize">16sp</item>
+        <item name="android:background">@android:color/transparent</item>
     </style>
 
 </resources>

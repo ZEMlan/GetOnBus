@@ -3,15 +3,17 @@ package ru.zemlyanaya.getonbus.routing
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.NonNull
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_rooting.view.*
-
 import ru.zemlyanaya.getonbus.R
 import ru.zemlyanaya.getonbus.database.FavRoute
 
@@ -27,13 +29,13 @@ private const val ARG_B = "b"
  * Use the [RoutingFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class RoutingFragment : Fragment() {
+class RoutingFragment : Fragment(){
     private var a: String? = null
     private var b: String? = null
 
     private var favRoutes: ArrayList<FavRoute>? = arrayListOf(
         FavRoute("На ЮнIT", "Малопрудная, 5", null),
-        FavRoute("Домой", "Домашняя, 66", null)
+        FavRoute("Домой", "Домашняя, 66", "home")
     )
 
     private lateinit var adapter: FavRoutesRecyclerViewAdapter
@@ -66,7 +68,13 @@ class RoutingFragment : Fragment() {
         itemAnimator.moveDuration = 400
 
         recyclerView.itemAnimator = itemAnimator
+        enableSwipeToEditAndUndo()
         return layout
+    }
+
+    private fun dataChanged(new: List<FavRoute>?){
+        recyclerView.adapter = this.adapter
+        adapter.setData(new.orEmpty() as ArrayList<FavRoute>)
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -87,6 +95,34 @@ class RoutingFragment : Fragment() {
         super.onDetach()
         listener = null
     }
+
+    private fun enableSwipeToEditAndUndo() {
+        val swipeToDeleteCallback: SwipeToDeleteCallback = object : SwipeToDeleteCallback(recyclerView.context) {
+            override fun onSwiped(@NonNull viewHolder: RecyclerView.ViewHolder, i: Int) {
+                val position = viewHolder.adapterPosition
+                val item: FavRoute = adapter.getData()[position]
+                adapter.removeItem(position)
+                view?.let {
+                    Snackbar
+                        .make(
+                            it,
+                            "Маршрут был удалён.",
+                            Snackbar.LENGTH_SHORT
+                        )
+                        .setAction("UNDO") {
+                            adapter.restoreItem(item, position)
+                            recyclerView.scrollToPosition(position)
+                        }
+                        .setActionTextColor(resources.getColor(R.color.textAccentColor))
+                        .show()
+
+                }
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+    }
+
 
     /**
      * This interface must be implemented by activities that contain this
