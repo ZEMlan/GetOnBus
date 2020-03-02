@@ -41,6 +41,7 @@
             android:layout_height="match_parent"
             android:inputType="textShortMessage"
             android:singleLine="true"
+            android:text="Моё местоположение"
             android:textColor="@color/textColor"
             android:textSize="18sp" />
 
@@ -90,7 +91,7 @@
         android:background="@drawable/gradient"
         android:insetTop="0dp"
         android:insetBottom="20dp"
-        android:letterSpacing="0.15"
+        android:letterSpacing="0.13"
         android:text="Поехали"
         android:textColor="@color/backgroundColor"
         android:textSize="17sp"

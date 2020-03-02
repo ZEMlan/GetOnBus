@@ -24,4 +24,11 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="AppTheme.DialogStyle" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/textAccentColor</item>
+        <item name="android:textSize">17sp</item>
+    </style>
+
 </resources>

@@ -6,10 +6,12 @@ import android.graphics.Shader
 import android.graphics.Shader.TileMode
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
 import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_rooting.*
 import kotlinx.android.synthetic.main.head_bar.*
 import ru.zemlyanaya.getonbus.about.AboutFragment
 import ru.zemlyanaya.getonbus.routing.RoutingFragment
@@ -42,6 +44,8 @@ class MainActivity : FragmentActivity(), RoutingFragment.OnFragmentInteractionLi
 
         butProfile.setOnClickListener { showProfileFragment() }
         butMap.setOnClickListener { showMapFragment() }
+
+
 
         showRouteFragment()
     }

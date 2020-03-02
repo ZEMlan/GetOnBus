@@ -1,18 +1,24 @@
 package ru.zemlyanaya.getonbus.routing
 
+import android.app.AlertDialog
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.fragment_rooting.view.*
 import ru.zemlyanaya.getonbus.R
 import ru.zemlyanaya.getonbus.database.FavRoute
@@ -33,13 +39,11 @@ class RoutingFragment : Fragment(){
     private var a: String? = null
     private var b: String? = null
 
-    private var favRoutes: ArrayList<FavRoute>? = arrayListOf(
-        FavRoute("На ЮнIT", "Малопрудная, 5", null),
-        FavRoute("Домой", "Домашняя, 66", "home")
-    )
-
+    private lateinit var viewModel: RoutingViewModel
     private lateinit var adapter: FavRoutesRecyclerViewAdapter
     private lateinit var recyclerView: RecyclerView
+
+    private var favRoutes: ArrayList<FavRoute>? = arrayListOf()
 
     private var listener: OnFragmentInteractionListener? = null
 
@@ -49,6 +53,10 @@ class RoutingFragment : Fragment(){
             a = it.getString(ARG_A)
             b = it.getString(ARG_B)
         }
+        viewModel = ViewModelProviders.of(this).get<RoutingViewModel>(RoutingViewModel::class.java)
+        viewModel.favRoutes.observe(this, Observer { routes ->
+            favRoutes?.let {dataChanged(routes)}
+        })
     }
 
     override fun onCreateView(
@@ -56,6 +64,7 @@ class RoutingFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         val layout = inflater.inflate(R.layout.fragment_rooting, container, false)
+
         adapter = FavRoutesRecyclerViewAdapter()
         recyclerView = layout.favRecyclerView
         recyclerView.adapter = adapter
@@ -69,7 +78,18 @@ class RoutingFragment : Fragment(){
 
         recyclerView.itemAnimator = itemAnimator
         enableSwipeToEditAndUndo()
+
+        val fab: FloatingActionButton = layout.findViewById(R.id.favFab)
+        fab.setOnClickListener { createAddDialog().show() }
         return layout
+    }
+
+    private fun showComputing(){
+        //TODO("show progress dialog")
+    }
+
+    private fun hideComputing(){
+        //TODO("hide progress dialog")
     }
 
     private fun dataChanged(new: List<FavRoute>?){
@@ -102,25 +122,85 @@ class RoutingFragment : Fragment(){
                 val position = viewHolder.adapterPosition
                 val item: FavRoute = adapter.getData()[position]
                 adapter.removeItem(position)
-                view?.let {
-                    Snackbar
-                        .make(
-                            it,
-                            "Маршрут был удалён.",
-                            Snackbar.LENGTH_SHORT
-                        )
-                        .setAction("UNDO") {
-                            adapter.restoreItem(item, position)
-                            recyclerView.scrollToPosition(position)
-                        }
-                        .setActionTextColor(resources.getColor(R.color.textAccentColor))
-                        .show()
-
-                }
+                view?.let { createEditDialog(item, position).show() }
             }
         }
         val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
+    }
+
+    private fun createAddDialog(): AlertDialog {
+        val builder = AlertDialog.Builder(context, R.style.AppTheme_DialogStyle)
+        val inflater = layoutInflater
+        val view = inflater.inflate(R.layout.add_fav_route_dialog, null)
+
+        val inputName: TextInputEditText = view.findViewById(R.id.textName)
+        val inputTo: TextInputEditText = view.findViewById(R.id.textTo)
+        val inputIcon: ImageButton = view.findViewById(R.id.dialogIcon)
+
+        builder.setView(view)
+            .setPositiveButton("Сохранить") { _, _ ->
+                try {
+                    val name = inputName.text.toString()
+                    val to = inputTo.text.toString()
+                    val icon = Icons.Heart
+
+                    val route = FavRoute(name, to, icon.name)
+                    viewModel.insert(route)
+                } catch (e: Exception) {
+                    showError(e.message.orEmpty())
+                }
+
+            }
+            .setNegativeButton("Отмена") {_, _ -> }
+        return builder.create()
+    }
+
+    private fun createEditDialog(route: FavRoute, position: Int): AlertDialog{
+        val builder = AlertDialog.Builder(context, R.style.AppTheme_DialogStyle)
+        val inflater = layoutInflater
+        val view = inflater.inflate(R.layout.edit_fav_route_dialog, null)
+
+        val inputName: TextInputEditText = view.findViewById(R.id.textName)
+        inputName.setText(route.name)
+        val inputTo: TextInputEditText = view.findViewById(R.id.textTo)
+        inputTo.setText(route.destination)
+        val inputIcon: ImageButton = view.findViewById(R.id.dialogIcon)
+
+        builder.setView(view)
+            .setPositiveButton("Изменить"
+            ) { _, _ ->
+                try {
+                    val name = inputName.text.toString()
+                    val to = inputTo.text.toString()
+                    val icon = Icons.Heart
+
+                    val newRoute = FavRoute(name, to, icon.name)
+                    viewModel.delete(route)
+                    viewModel.insert(newRoute)
+                } catch (e: Exception) {
+                    showError(e.message.orEmpty())
+                    viewModel.insert(route)
+                }
+            }
+            .setNeutralButton(
+                "Отмена"
+            ) { _, _ ->
+                viewModel.insert(route)
+                adapter.restoreItem(route, position)
+                recyclerView.scrollToPosition(position)
+            }
+            .setNegativeButton(
+                "Удалить"
+            ) {_, _ ->
+                viewModel.delete(route)
+            }
+        return builder.create()
+    }
+
+    private fun showError(e: String){
+        Snackbar.make(recyclerView, e, Snackbar.LENGTH_SHORT)
+            .show()
     }
 
 
