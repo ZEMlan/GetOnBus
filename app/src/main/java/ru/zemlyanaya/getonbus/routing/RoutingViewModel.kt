@@ -30,6 +30,11 @@ class RoutingViewModel(app: Application) : AndroidViewModel(app) {
         repository.delete(route)
     }
 
+    fun change(oldRoute: FavRoute, newRoute: FavRoute) = GlobalScope.launch {
+        repository.delete(oldRoute)
+        repository.insert(newRoute)
+    }
+
 
     fun compute(a: String, b: String){
         isComputing.postValue(true)

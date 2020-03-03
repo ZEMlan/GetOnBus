@@ -145,6 +145,9 @@ class RoutingFragment : Fragment(){
                     val to = inputTo.text.toString()
                     val icon = Icons.Heart
 
+                    if(name == "" || to == "")
+                        throw Exception("Заполните все поля!")
+
                     val route = FavRoute(name, to, icon.name)
                     viewModel.insert(route)
                 } catch (e: Exception) {
@@ -175,12 +178,16 @@ class RoutingFragment : Fragment(){
                     val to = inputTo.text.toString()
                     val icon = Icons.Heart
 
+                    if(name == "" || to == "")
+                        throw Exception("Заполните все поля!")
+
                     val newRoute = FavRoute(name, to, icon.name)
-                    viewModel.delete(route)
-                    viewModel.insert(newRoute)
+                    viewModel.change(route, newRoute)
                 } catch (e: Exception) {
                     showError(e.message.orEmpty())
                     viewModel.insert(route)
+                    adapter.restoreItem(route, position)
+                    recyclerView.scrollToPosition(position)
                 }
             }
             .setNeutralButton(
