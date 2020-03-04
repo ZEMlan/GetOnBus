@@ -19,7 +19,7 @@ class RoutingViewModel(app: Application) : AndroidViewModel(app) {
     init {
         val favRouteDao = AppDatabase.getDatabase(app).favRouteDao()
         repository = Repository(favRouteDao)
-        favRoutes = repository.allPersons
+        favRoutes = repository.allFavRoutes
     }
 
     fun insert(route: FavRoute) = GlobalScope.launch {
@@ -30,9 +30,8 @@ class RoutingViewModel(app: Application) : AndroidViewModel(app) {
         repository.delete(route)
     }
 
-    fun change(oldRoute: FavRoute, newRoute: FavRoute) = GlobalScope.launch {
-        repository.delete(oldRoute)
-        repository.insert(newRoute)
+    fun edit(oldRoute: FavRoute, newRoute: FavRoute) = GlobalScope.launch {
+        repository.edit(oldRoute, newRoute)
     }
 
 

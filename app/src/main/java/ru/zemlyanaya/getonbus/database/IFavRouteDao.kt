@@ -13,4 +13,7 @@ interface IFavRouteDao {
 
     @Delete
     fun delete(route: FavRoute)
+
+    @Query("UPDATE favRoutes SET name=:newName, destination=:newDestination, icon=:newIcon WHERE `key`=:oldKey")
+    fun edit(oldKey: Int, newName: String, newDestination: String, newIcon: String?)
 }
