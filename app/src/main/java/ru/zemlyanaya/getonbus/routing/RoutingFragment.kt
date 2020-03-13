@@ -201,6 +201,17 @@ class RoutingFragment : Fragment(){
                 "Удалить"
             ) {_, _ ->
                 viewModel.delete(route)
+                Snackbar
+                    .make(recyclerView, "Приключение успешно отправлено в корзину.", Snackbar.LENGTH_SHORT)
+                    .setAction(
+                    "ВЕРНУТЬ"
+                )  {
+                        viewModel.insert(route)
+                        adapter.restoreItem(route, position)
+                        recyclerView.scrollToPosition(position )
+                    }
+                    .setActionTextColor(resources.getColor(R.color.textAccentColor))
+                    .show()
             }
         return builder.create()
     }
