@@ -4,20 +4,18 @@ import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.graphics.Shader.TileMode
-import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
 import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_rooting.*
 import kotlinx.android.synthetic.main.head_bar.*
 import ru.zemlyanaya.getonbus.about.AboutFragment
 import ru.zemlyanaya.getonbus.routing.RoutingFragment
+import ru.zemlyanaya.getonbus.trip.TripFragment
 
 
-class MainActivity : FragmentActivity(), RoutingFragment.OnFragmentInteractionListener {
+class MainActivity : FragmentActivity(), RoutingFragment.OnGoInteractionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,8 +48,11 @@ class MainActivity : FragmentActivity(), RoutingFragment.OnFragmentInteractionLi
         showRouteFragment()
     }
 
-    override fun onFragmentInteraction(uri: Uri) {
-        TODO("not implemented")
+    override fun onGoInteraction(a: String, b: String) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.frame, TripFragment.newInstance(a, b))
+            .commitAllowingStateLoss()
+        header.visibility = View.GONE
     }
 
     private fun showMapFragment(){}
@@ -82,7 +83,7 @@ class MainActivity : FragmentActivity(), RoutingFragment.OnFragmentInteractionLi
     private fun showRouteFragment(){
         header.visibility = View.VISIBLE
         supportFragmentManager.beginTransaction()
-            .replace(R.id.frame, RoutingFragment())
+            .replace(R.id.frame, RoutingFragment.newInstance())
             .commitAllowingStateLoss()
     }
 }

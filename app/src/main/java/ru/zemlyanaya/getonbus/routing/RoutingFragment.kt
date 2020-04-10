@@ -2,7 +2,6 @@ package ru.zemlyanaya.getonbus.routing
 
 import android.app.AlertDialog
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,25 +18,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.android.synthetic.main.fragment_rooting.*
 import kotlinx.android.synthetic.main.fragment_rooting.view.*
 import ru.zemlyanaya.getonbus.R
 import ru.zemlyanaya.getonbus.database.FavRoute
 
 
-private const val ARG_A = "a"
-private const val ARG_B = "b"
-
 /**
  * A simple [Fragment] subclass.
  * Activities that contain this fragment must implement the
- * [RoutingFragment.OnFragmentInteractionListener] interface
+ * [RoutingFragment.OnGoInteractionListener] interface
  * to handle interaction events.
+ * [FavRoutesRecyclerViewAdapter.OnCardClickListener] interface
+ * to handle OnCardClick events.
  * Use the [RoutingFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
 class RoutingFragment : Fragment(){
-    private var a: String? = null
-    private var b: String? = null
 
     private lateinit var viewModel: RoutingViewModel
     private lateinit var adapter: FavRoutesRecyclerViewAdapter
@@ -45,16 +42,12 @@ class RoutingFragment : Fragment(){
 
     private var favRoutes: ArrayList<FavRoute>? = arrayListOf()
 
-    private var listener: OnFragmentInteractionListener? = null
+    private var onGoListener: OnGoInteractionListener? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            a = it.getString(ARG_A)
-            b = it.getString(ARG_B)
-        }
-        viewModel = ViewModelProviders.of(this).get<RoutingViewModel>(RoutingViewModel::class.java)
-        viewModel.favRoutes.observe(this, Observer { routes ->
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel = ViewModelProviders.of(this).get(RoutingViewModel::class.java)
+        viewModel.favRoutes.observe(viewLifecycleOwner, Observer { routes ->
             favRoutes?.let {dataChanged(routes)}
         })
     }
@@ -65,10 +58,20 @@ class RoutingFragment : Fragment(){
     ): View? {
         val layout = inflater.inflate(R.layout.fragment_rooting, container, false)
 
-        adapter = FavRoutesRecyclerViewAdapter()
+        val butGo = layout.butGo
+        butGo.setOnClickListener {
+            val from = textA.text.toString()
+            val to = textB.text.toString()
+            onGo(from, to)
+        }
+
+        adapter = FavRoutesRecyclerViewAdapter{
+            textB.setText(it.destination)
+        }
+
         recyclerView = layout.favRecyclerView
-        recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(layout.context)
+        recyclerView.adapter = adapter
         adapter.setData(favRoutes as ArrayList<FavRoute>)
 
         val itemAnimator = DefaultItemAnimator()
@@ -97,15 +100,14 @@ class RoutingFragment : Fragment(){
         adapter.setData(new.orEmpty() as ArrayList<FavRoute>)
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        listener?.onFragmentInteraction(uri)
+    private fun onGo(a: String, b: String ) {
+        onGoListener?.onGoInteraction(a, b)
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            listener = context
+        if (context is OnGoInteractionListener) {
+            onGoListener = context
         } else {
             throw RuntimeException("$context must implement OnFragmentInteractionListener")
         }
@@ -113,7 +115,7 @@ class RoutingFragment : Fragment(){
 
     override fun onDetach() {
         super.onDetach()
-        listener = null
+        onGoListener = null
     }
 
     private fun enableSwipeToEditAndUndo() {
@@ -202,7 +204,7 @@ class RoutingFragment : Fragment(){
             ) {_, _ ->
                 viewModel.delete(route)
                 Snackbar
-                    .make(recyclerView, "Приключение успешно отправлено в корзину.", Snackbar.LENGTH_SHORT)
+                    .make(recyclerView, "Приключение успешно забыто.", Snackbar.LENGTH_SHORT)
                     .setAction(
                     "ВЕРНУТЬ"
                 )  {
@@ -228,27 +230,12 @@ class RoutingFragment : Fragment(){
      * to the activity and potentially other fragments contained in that
      * activity.
      */
-    interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onFragmentInteraction(uri: Uri)
+    interface OnGoInteractionListener {
+        fun onGoInteraction(a: String, b: String)
     }
 
+
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param a point from.
-         * @param b point to.
-         * @return A new instance of fragment RootingFragment.
-         */
-        @JvmStatic
-        fun newInstance(a: String, b: String) =
-            RoutingFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_A, a)
-                    putString(ARG_B, b)
-                }
-            }
+        fun newInstance() = RoutingFragment()
     }
 }

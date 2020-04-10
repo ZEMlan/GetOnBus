@@ -10,12 +10,10 @@ import kotlinx.android.synthetic.main.fav_route_card.view.*
 import ru.zemlyanaya.getonbus.R
 import ru.zemlyanaya.getonbus.database.FavRoute
 
-class FavRoutesRecyclerViewAdapter internal constructor():
+class FavRoutesRecyclerViewAdapter constructor(private val onCardClickListener: (FavRoute) -> Unit):
     RecyclerView.Adapter<FavRoutesRecyclerViewAdapter.RouteCardViewHolder>() {
 
     var favRoutes = ArrayList<FavRoute>()
-    //private lateinit var listener: View.OnClickListener
-
 
     inner class RouteCardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val routeName: TextView = itemView.routeName
@@ -31,14 +29,12 @@ class FavRoutesRecyclerViewAdapter internal constructor():
 
     override fun onBindViewHolder(holder: RouteCardViewHolder, position: Int) {
         val current = favRoutes[position]
+        holder.itemView.setOnClickListener { onCardClickListener.invoke(current) }
         holder.routeName.text = current.name
         holder.routeDestination.text = current.destination
         holder.routeIcon.setImageResource(parseIcon(current.icon))
     }
 
-//    internal fun addOnClickListener(listener: View.OnClickListener){
-//        this.listener = listener
-//    }
 
     private fun parseIcon(iconName: String?): Int{
         return when(iconName){
@@ -68,4 +64,5 @@ class FavRoutesRecyclerViewAdapter internal constructor():
     }
 
     override fun getItemCount() = favRoutes.size
+
 }

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".trip.TripFragment">
+
+    <ImageView
+        android:id="@+id/butBack"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:src="@drawable/ic_left_arrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:elevation="4dp"
+        android:text="Проложить другой маршрут"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="@+id/butBack"
+        app:layout_constraintStart_toEndOf="@+id/butBack"
+        app:layout_constraintTop_toTopOf="@+id/butBack"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="22dp"
+        android:elevation="4dp"
+        android:letterSpacing="0.2"
+        android:text="Текущий шаг"
+        android:textColor="@color/textAccentColor"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/butBack"
+        app:layout_constraintTop_toBottomOf="@+id/butBack" />
+
+    <TextView
+        android:id="@+id/instruction_now"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="32dp"
+        android:text="Что делать на текущем шаге."
+        app:layout_constraintStart_toStartOf="@+id/textView1"
+        app:layout_constraintTop_toBottomOf="@+id/textView1" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="0dp"
+        android:layout_height="621dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="@+id/instruction_now"
+        app:layout_constraintStart_toStartOf="@+id/instruction_now"
+        app:layout_constraintTop_toBottomOf="@+id/instruction_now"
+        tools:listitem="@layout/bus_card" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
