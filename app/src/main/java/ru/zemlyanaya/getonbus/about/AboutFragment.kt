@@ -5,19 +5,22 @@ import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_about.view.*
-import kotlinx.android.synthetic.main.head_bar.*
-
+import ru.zemlyanaya.getonbus.IOnBackPressed
 import ru.zemlyanaya.getonbus.R
 
 /**
  * A simple [Fragment] subclass.
  */
-class AboutFragment : Fragment() {
+class AboutFragment : Fragment(), IOnBackPressed {
+
+    override fun onBackPressed(): Boolean {
+        return true
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +44,9 @@ class AboutFragment : Fragment() {
             Shader.TileMode.MIRROR
         )
         label.paint.shader = textShader
+
+        val backButton = layout.butBack
+        backButton.setOnClickListener { activity?.onBackPressed() }
 
         return layout
     }

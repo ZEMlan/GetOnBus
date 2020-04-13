@@ -20,6 +20,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.fragment_rooting.*
 import kotlinx.android.synthetic.main.fragment_rooting.view.*
+import ru.zemlyanaya.getonbus.IOnBackPressed
 import ru.zemlyanaya.getonbus.R
 import ru.zemlyanaya.getonbus.database.FavRoute
 
@@ -34,7 +35,7 @@ import ru.zemlyanaya.getonbus.database.FavRoute
  * Use the [RoutingFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class RoutingFragment : Fragment(){
+class RoutingFragment : Fragment(), IOnBackPressed {
 
     private lateinit var viewModel: RoutingViewModel
     private lateinit var adapter: FavRoutesRecyclerViewAdapter
@@ -43,6 +44,10 @@ class RoutingFragment : Fragment(){
     private var favRoutes: ArrayList<FavRoute>? = arrayListOf()
 
     private var onGoListener: OnGoInteractionListener? = null
+
+    override fun onBackPressed(): Boolean {
+        return false
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

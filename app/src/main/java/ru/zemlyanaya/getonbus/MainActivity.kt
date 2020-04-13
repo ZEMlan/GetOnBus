@@ -50,6 +50,7 @@ class MainActivity : FragmentActivity(), RoutingFragment.OnGoInteractionListener
 
     override fun onGoInteraction(a: String, b: String) {
         supportFragmentManager.beginTransaction()
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             .replace(R.id.frame, TripFragment.newInstance(a, b))
             .commitAllowingStateLoss()
         header.visibility = View.GONE
@@ -60,14 +61,17 @@ class MainActivity : FragmentActivity(), RoutingFragment.OnGoInteractionListener
     private fun showProfileFragment(){}
 
     override fun onBackPressed() {
-        val f = supportFragmentManager.findFragmentById(R.id.frame)
-        if (f !is RoutingFragment) {
-            supportFragmentManager.beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                .replace(R.id.frame, RoutingFragment())
-                .commitAllowingStateLoss()
-            header.visibility = View.VISIBLE
+        val fragment = supportFragmentManager.findFragmentById(R.id.frame)
+        (fragment as? IOnBackPressed)?.onBackPressed()?.let {
+            if(it) {
+                this.supportFragmentManager.beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                    .replace(R.id.frame, RoutingFragment.newInstance())
+                    .commitAllowingStateLoss()
+                header.visibility = View.VISIBLE
+            }
         }
+
     }
 
     private fun showAboutFragment(){
@@ -83,6 +87,7 @@ class MainActivity : FragmentActivity(), RoutingFragment.OnGoInteractionListener
     private fun showRouteFragment(){
         header.visibility = View.VISIBLE
         supportFragmentManager.beginTransaction()
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             .replace(R.id.frame, RoutingFragment.newInstance())
             .commitAllowingStateLoss()
     }
