@@ -8,20 +8,38 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.head_bar.*
+import kotlinx.coroutines.*
 import ru.zemlyanaya.getonbus.about.AboutFragment
 import ru.zemlyanaya.getonbus.routing.RoutingFragment
 import ru.zemlyanaya.getonbus.trip.TripFragment
+import java.io.IOException
+import java.net.InetSocketAddress
+import java.net.Socket
 
 
 class MainActivity : FragmentActivity(), RoutingFragment.OnGoInteractionListener {
+
+    private var activityJob = Job()
+    private val activityScope = CoroutineScope(Dispatchers.Main + activityJob)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initHeader()
+        activityScope.launch(Dispatchers.Main) {
+            val hasInternet = withContext(Dispatchers.IO) { hasInternetConnection() }
+            Snackbar.make(
+                frame.rootView,
+                "Есть интернет-подключение:$hasInternet",
+                Snackbar.LENGTH_LONG
+            ).show()
+        }
     }
+
 
     private fun initHeader(){
         val textShader: Shader = LinearGradient(
@@ -91,4 +109,25 @@ class MainActivity : FragmentActivity(), RoutingFragment.OnGoInteractionListener
             .replace(R.id.frame, RoutingFragment.newInstance())
             .commitAllowingStateLoss()
     }
+
+    private fun hasInternetConnection(): Boolean {
+        return try {
+            // Connect to Google DNS to check for connection
+            val timeoutMs = 1500
+            val socket = Socket()
+            val socketAddress = InetSocketAddress("8.8.8.8", 53)
+
+            socket.connect(socketAddress, timeoutMs)
+            socket.close()
+
+            true
+        } catch (e: IOException) {
+            false
+        }
+    }
+
+    fun cancelJob() {
+        activityJob.cancel()
+    }
+
 }

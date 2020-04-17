@@ -23,7 +23,7 @@
         android:id="@+id/inputLayoutA"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="0dp"
-        android:layout_height="56dp"
+        android:layout_height="60dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
@@ -39,11 +39,11 @@
             android:id="@+id/textA"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:inputType="textShortMessage"
+            android:inputType="text"
             android:singleLine="true"
             android:text="Моё местоположение"
             android:textColor="@color/textColor"
-            android:textSize="18sp" />
+            android:textSize="17sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -61,7 +61,7 @@
         android:id="@+id/inputLayoutB"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="0dp"
-        android:layout_height="56dp"
+        android:layout_height="60dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:theme="@style/AppTheme.InputLayoutStyle"
@@ -76,10 +76,10 @@
             android:id="@+id/textB"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:inputType="textShortMessage"
+            android:inputType="text"
             android:singleLine="true"
             android:textColor="@color/textColor"
-            android:textSize="18sp" />
+            android:textSize="17sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
