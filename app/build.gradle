@@ -8,6 +8,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 29
+    viewBinding.enabled = true
     defaultConfig {
         applicationId "ru.zemlyanaya.getonbus"
         minSdkVersion 21

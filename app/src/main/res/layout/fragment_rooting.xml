@@ -87,7 +87,7 @@
         android:id="@+id/butGo"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/gradient"
         android:insetTop="0dp"
         android:insetBottom="20dp"
@@ -98,7 +98,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/inputLayoutB"
         app:layout_constraintStart_toStartOf="@+id/textView1"
-        app:layout_constraintTop_toBottomOf="@+id/inputLayoutB"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
         app:rippleColor="@color/rippleColor" />
 
 
@@ -146,5 +146,39 @@
         tools:listitem="@layout/fav_route_card">
 
     </androidx.recyclerview.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Интернет:"
+        android:textColor="@color/secondaryTextColor"
+        app:layout_constraintStart_toStartOf="@+id/inputLayoutB"
+        app:layout_constraintTop_toBottomOf="@+id/inputLayoutB" />
+
+    <TextView
+        android:id="@+id/textInternet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:text="unknown"
+        android:textColor="@color/secondaryTextColor"
+        app:layout_constraintStart_toEndOf="@+id/textView3"
+        app:layout_constraintTop_toTopOf="@+id/textView3" />
+
+    <Button
+        android:id="@+id/butCheckConnection"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="Проверить"
+        app:layout_constraintBottom_toBottomOf="@+id/textInternet"
+        app:layout_constraintEnd_toEndOf="@+id/inputLayoutB"
+        app:layout_constraintTop_toTopOf="@+id/textInternet"
+        app:layout_constraintVertical_bias="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

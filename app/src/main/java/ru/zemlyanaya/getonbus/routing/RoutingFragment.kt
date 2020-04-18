@@ -20,9 +20,13 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.fragment_rooting.*
 import kotlinx.android.synthetic.main.fragment_rooting.view.*
+import kotlinx.coroutines.*
 import ru.zemlyanaya.getonbus.IOnBackPressed
 import ru.zemlyanaya.getonbus.R
 import ru.zemlyanaya.getonbus.database.FavRoute
+import java.io.IOException
+import java.net.InetSocketAddress
+import java.net.Socket
 
 
 /**
@@ -44,6 +48,10 @@ class RoutingFragment : Fragment(), IOnBackPressed {
     private var favRoutes: ArrayList<FavRoute>? = arrayListOf()
 
     private var onGoListener: OnGoInteractionListener? = null
+
+
+    private var fragmentJob = Job()
+    private val fragmentScope = CoroutineScope(Dispatchers.Main + fragmentJob)
 
     override fun onBackPressed(): Boolean {
         return false
@@ -68,6 +76,20 @@ class RoutingFragment : Fragment(), IOnBackPressed {
             val from = textA.text.toString()
             val to = textB.text.toString()
             onGo(from, to)
+        }
+
+        val textInternet = layout.textInternet
+
+        val butCheckConnection =  layout.butCheckConnection
+        butCheckConnection.setOnClickListener {
+            fragmentScope.launch(Dispatchers.Main) {
+                textInternet.text = "проверяем"
+                val hasInternet = withContext(Dispatchers.IO) {
+                    Thread.sleep(1000L)
+                    hasInternetConnection()
+                }
+                textInternet.text = if(hasInternet) "есть" else "нет"
+            }
         }
 
         adapter = FavRoutesRecyclerViewAdapter{
@@ -226,6 +248,26 @@ class RoutingFragment : Fragment(), IOnBackPressed {
     private fun showError(e: String){
         Snackbar.make(recyclerView, e, Snackbar.LENGTH_SHORT)
             .show()
+    }
+
+    private fun hasInternetConnection(): Boolean {
+        return try {
+            // Connect to Google DNS to check for connection
+            val timeoutMs = 1500
+            val socket = Socket()
+            val socketAddress = InetSocketAddress("8.8.8.8", 53)
+
+            socket.connect(socketAddress, timeoutMs)
+            socket.close()
+
+            true
+        } catch (e: IOException) {
+            false
+        }
+    }
+
+    fun cancelJob() {
+        fragmentJob.cancel()
     }
 
 
