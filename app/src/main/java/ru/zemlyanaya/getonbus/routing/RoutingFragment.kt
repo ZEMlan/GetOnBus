@@ -114,14 +114,6 @@ class RoutingFragment : Fragment(), IOnBackPressed {
         return layout
     }
 
-    private fun showComputing(){
-        //TODO("show progress dialog")
-    }
-
-    private fun hideComputing(){
-        //TODO("hide progress dialog")
-    }
-
     private fun dataChanged(new: List<FavRoute>?){
         recyclerView.adapter = this.adapter
         adapter.setData(new.orEmpty() as ArrayList<FavRoute>)
@@ -281,8 +273,4 @@ class RoutingFragment : Fragment(), IOnBackPressed {
         fun onGoInteraction(a: String, b: String)
     }
 
-
-    companion object {
-        fun newInstance() = RoutingFragment()
-    }
 }

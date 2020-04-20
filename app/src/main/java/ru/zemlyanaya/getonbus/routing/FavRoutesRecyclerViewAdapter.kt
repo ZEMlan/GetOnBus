@@ -44,8 +44,8 @@ class FavRoutesRecyclerViewAdapter constructor(private val onCardClickListener: 
         }
     }
 
-    internal fun setData(persons: ArrayList<FavRoute>) {
-        this.favRoutes = persons
+    internal fun setData(routes: ArrayList<FavRoute>) {
+        this.favRoutes = routes
         notifyDataSetChanged()
     }
 

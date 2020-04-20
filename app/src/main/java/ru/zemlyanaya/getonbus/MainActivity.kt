@@ -68,7 +68,7 @@ class MainActivity : FragmentActivity(), RoutingFragment.OnGoInteractionListener
             if(it) {
                 this.supportFragmentManager.beginTransaction()
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                    .replace(R.id.frame, RoutingFragment.newInstance())
+                    .replace(R.id.frame, RoutingFragment())
                     .commitAllowingStateLoss()
                 header.visibility = View.VISIBLE
             }
@@ -90,7 +90,7 @@ class MainActivity : FragmentActivity(), RoutingFragment.OnGoInteractionListener
         header.visibility = View.VISIBLE
         supportFragmentManager.beginTransaction()
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            .replace(R.id.frame, RoutingFragment.newInstance())
+            .replace(R.id.frame, RoutingFragment())
             .commitAllowingStateLoss()
     }
 
