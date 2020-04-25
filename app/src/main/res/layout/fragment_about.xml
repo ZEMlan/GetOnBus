@@ -80,7 +80,7 @@
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="36dp"
         android:layout_marginTop="4dp"
         android:letterSpacing="0.1"
         android:text="team!!.name"

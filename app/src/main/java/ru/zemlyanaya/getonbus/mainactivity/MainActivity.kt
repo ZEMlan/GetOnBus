@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.head_bar.*
 import ru.zemlyanaya.getonbus.IOnBackPressed
 import ru.zemlyanaya.getonbus.R
 import ru.zemlyanaya.getonbus.mainactivity.about.AboutFragment
+import ru.zemlyanaya.getonbus.mainactivity.profile.ProfileFragment
 import ru.zemlyanaya.getonbus.mainactivity.routing.RoutingFragment
 import ru.zemlyanaya.getonbus.mainactivity.trip.TripFragment
 
@@ -48,10 +49,18 @@ class MainActivity : FragmentActivity(), RoutingFragment.OnGoInteractionListener
         label.paint.shader = textShader
         label.setOnClickListener { showAboutFragment() }
 
-        butProfile.setOnClickListener { showProfileFragment() }
+        butProfile.setOnClickListener {
+            val fragment = supportFragmentManager.findFragmentById(R.id.frameMain)
+            if(fragment is RoutingFragment) {
+                showProfileFragment()
+                butProfile.setImageResource(R.drawable.ic_route)
+            }
+            else{
+                showRouteFragment()
+                butProfile.setImageResource(R.drawable.ic_account)
+            }
+        }
         butMap.setOnClickListener { showMapFragment() }
-
-
 
         showRouteFragment()
     }
@@ -66,7 +75,12 @@ class MainActivity : FragmentActivity(), RoutingFragment.OnGoInteractionListener
 
     private fun showMapFragment(){}
 
-    private fun showProfileFragment(){}
+    private fun showProfileFragment(){
+        header.visibility = View.VISIBLE
+        supportFragmentManager.beginTransaction()
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            .replace(R.id.frameMain, ProfileFragment())
+            .commitAllowingStateLoss()}
 
     override fun onBackPressed() {
         val fragment = supportFragmentManager.findFragmentById(R.id.frameMain)

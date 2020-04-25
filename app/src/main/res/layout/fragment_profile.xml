@@ -8,15 +8,91 @@
     tools:context=".mainactivity.profile.ProfileFragment">
 
 
-    <ImageButton
-        android:id="@+id/butBack2"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_left_arrow"
+    <CheckBox
+        android:id="@+id/checkTrolley"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:buttonTint="@color/primaryDarkColor"
+        android:checked="true"
+        android:letterSpacing="0.1"
+        android:text="Троллейбус"
+        android:textColorHighlight="@color/rippleColor"
+        android:textColorLink="@color/rippleColor"
+        android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="@+id/checkTram"
+        app:layout_constraintTop_toBottomOf="@+id/checkTram" />
+
+    <CheckBox
+        android:id="@+id/checkMetro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:buttonTint="@color/primaryDarkColor"
+        android:checked="true"
+        android:letterSpacing="0.1"
+        android:text="Метро"
+        android:textColorHighlight="@color/rippleColor"
+        android:textColorLink="@color/rippleColor"
+        android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="@+id/checkTrolley"
+        app:layout_constraintTop_toBottomOf="@+id/checkTrolley" />
+
+    <CheckBox
+        android:id="@+id/checkBus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="44dp"
+        android:buttonTint="@color/primaryDarkColor"
+        android:checked="true"
+        android:letterSpacing="0.1"
+        android:text="Автобус"
+        android:textColorHighlight="@color/rippleColor"
+        android:textColorLink="@color/rippleColor"
+        android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="@+id/flipTab"
+        app:layout_constraintTop_toBottomOf="@+id/flipTab" />
+
+    <CheckBox
+        android:id="@+id/checkTram"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:buttonTint="@color/primaryDarkColor"
+        android:checked="true"
+        android:letterSpacing="0.1"
+        android:text="Трамвай"
+        android:textColorHighlight="@color/rippleColor"
+        android:textColorLink="@color/rippleColor"
+        android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="@+id/checkBus"
+        app:layout_constraintTop_toBottomOf="@+id/checkBus" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_marginTop="64dp"
+        android:src="@drawable/ic_alien"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.jem.fliptabs.FlipTab
+        android:id="@+id/flipTab"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        app:flipAnimationDuration="400"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:leftTabText="Быстрее"
+        app:overallColor="@color/primaryDarkColor"
+        app:rightTabText="Дешевле"
+        app:startingTab="left"
+        app:textColor="@color/backgroundColor"
+        app:wobbleAngle="3"
+        app:wobbleReturnAnimationDuration="200" />
 </androidx.constraintlayout.widget.ConstraintLayout>
