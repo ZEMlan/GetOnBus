@@ -1,8 +1,8 @@
-package ru.zemlyanaya.getonbus
+package ru.zemlyanaya.getonbus.mainactivity
 
 import androidx.lifecycle.LiveData
-import ru.zemlyanaya.getonbus.database.FavRoute
-import ru.zemlyanaya.getonbus.database.IFavRouteDao
+import ru.zemlyanaya.getonbus.mainactivity.database.FavRoute
+import ru.zemlyanaya.getonbus.mainactivity.database.IFavRouteDao
 
 
 class Repository(private val favRouteDao: IFavRouteDao) {

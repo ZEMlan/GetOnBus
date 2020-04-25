@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="AppTheme.MainActivity" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorAccent">@color/textAccentColor</item>
@@ -10,6 +10,16 @@
         <item name="android:textViewStyle">@style/AppTheme.TextViewStyle</item>
         <item name="android:editTextStyle">@style/AppTheme.TextViewStyle</item>
         <item name="snackbarButtonStyle">@style/AppTheme.SnackbarButtonStyle</item>
+    </style>
+
+    <style name="AppTheme.IntroActivity" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/textAccentColor</item>
+        <item name="android:fontFamily">monospace</item>
+        <item name="android:statusBarColor">@color/primaryDarkColor</item>
+        <item name="colorControlHighlight">@color/rippleColor</item>
+        <item name="android:textViewStyle">@style/AppTheme.TextViewStyle</item>
     </style>
 
     <style name="AppTheme.InputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">

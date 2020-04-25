@@ -1,4 +1,4 @@
-package ru.zemlyanaya.getonbus.database
+package ru.zemlyanaya.getonbus.mainactivity.database
 
 import android.content.Context
 import androidx.room.Database

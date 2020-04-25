@@ -1,4 +1,4 @@
-package ru.zemlyanaya.getonbus.database
+package ru.zemlyanaya.getonbus.mainactivity.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*

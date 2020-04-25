@@ -1,4 +1,4 @@
-package ru.zemlyanaya.getonbus.routing
+package ru.zemlyanaya.getonbus.mainactivity.routing
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fav_route_card.view.*
 import ru.zemlyanaya.getonbus.R
-import ru.zemlyanaya.getonbus.database.FavRoute
+import ru.zemlyanaya.getonbus.mainactivity.database.FavRoute
 
 class FavRoutesRecyclerViewAdapter constructor(private val onCardClickListener: (FavRoute) -> Unit):
     RecyclerView.Adapter<FavRoutesRecyclerViewAdapter.RouteCardViewHolder>() {

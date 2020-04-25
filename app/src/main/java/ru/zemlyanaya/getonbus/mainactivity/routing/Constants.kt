@@ -1,4 +1,4 @@
-package ru.zemlyanaya.getonbus.routing
+package ru.zemlyanaya.getonbus.mainactivity.routing
 
 enum class Icons {
     Heart, Home, Work

@@ -1,4 +1,4 @@
-package ru.zemlyanaya.getonbus.routing
+package ru.zemlyanaya.getonbus.mainactivity.routing
 
 import android.app.AlertDialog
 import android.content.Context
@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_rooting.view.*
 import kotlinx.coroutines.*
 import ru.zemlyanaya.getonbus.IOnBackPressed
 import ru.zemlyanaya.getonbus.R
-import ru.zemlyanaya.getonbus.database.FavRoute
+import ru.zemlyanaya.getonbus.mainactivity.database.FavRoute
 import java.io.IOException
 import java.net.InetSocketAddress
 import java.net.Socket

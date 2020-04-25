@@ -1,4 +1,4 @@
-package ru.zemlyanaya.getonbus.trip
+package ru.zemlyanaya.getonbus.mainactivity.trip
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

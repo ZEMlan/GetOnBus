@@ -1,4 +1,4 @@
-package ru.zemlyanaya.getonbus.trip
+package ru.zemlyanaya.getonbus.mainactivity.trip
 
 import android.view.LayoutInflater
 import android.view.View

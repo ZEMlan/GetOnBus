@@ -1,4 +1,4 @@
-package ru.zemlyanaya.getonbus.about
+package ru.zemlyanaya.getonbus.mainactivity.about
 
 
 import android.graphics.Color

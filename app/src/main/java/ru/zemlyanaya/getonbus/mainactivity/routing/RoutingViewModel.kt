@@ -1,13 +1,13 @@
-package ru.zemlyanaya.getonbus.routing
+package ru.zemlyanaya.getonbus.mainactivity.routing
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import ru.zemlyanaya.getonbus.Repository
-import ru.zemlyanaya.getonbus.database.AppDatabase
-import ru.zemlyanaya.getonbus.database.FavRoute
+import ru.zemlyanaya.getonbus.mainactivity.Repository
+import ru.zemlyanaya.getonbus.mainactivity.database.AppDatabase
+import ru.zemlyanaya.getonbus.mainactivity.database.FavRoute
 
 class RoutingViewModel(app: Application) : AndroidViewModel(app) {
 

@@ -1,4 +1,4 @@
-package ru.zemlyanaya.getonbus.database
+package ru.zemlyanaya.getonbus.mainactivity.database
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
