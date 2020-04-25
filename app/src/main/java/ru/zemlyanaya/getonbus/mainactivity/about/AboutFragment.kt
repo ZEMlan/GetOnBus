@@ -13,8 +13,6 @@ import kotlinx.android.synthetic.main.fragment_about.view.*
 import ru.zemlyanaya.getonbus.BuildConfig
 import ru.zemlyanaya.getonbus.IOnBackPressed
 import ru.zemlyanaya.getonbus.R
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 class AboutFragment : Fragment(), IOnBackPressed {
@@ -49,10 +47,10 @@ class AboutFragment : Fragment(), IOnBackPressed {
         val backButton = layout.butBack
         backButton.setOnClickListener { activity?.onBackPressed() }
 
-        val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.UK)
+        //val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.UK)
 
         val textVersion = layout.textVersion
-        textVersion.text = "Версия ${BuildConfig.VERSION_NAME} от ${sdf.format(Date())}"
+        textVersion.text = "Версия ${BuildConfig.VERSION_NAME} от 25.04.2020"
 
         return layout
     }

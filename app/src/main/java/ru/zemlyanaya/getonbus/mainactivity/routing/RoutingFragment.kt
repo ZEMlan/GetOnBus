@@ -18,8 +18,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
-import kotlinx.android.synthetic.main.fragment_rooting.*
-import kotlinx.android.synthetic.main.fragment_rooting.view.*
+import kotlinx.android.synthetic.main.fragment_routing.*
+import kotlinx.android.synthetic.main.fragment_routing.view.*
 import kotlinx.coroutines.*
 import ru.zemlyanaya.getonbus.IOnBackPressed
 import ru.zemlyanaya.getonbus.R
@@ -69,7 +69,7 @@ class RoutingFragment : Fragment(), IOnBackPressed {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val layout = inflater.inflate(R.layout.fragment_rooting, container, false)
+        val layout = inflater.inflate(R.layout.fragment_routing, container, false)
 
         val butGo = layout.butGo
         butGo.setOnClickListener {

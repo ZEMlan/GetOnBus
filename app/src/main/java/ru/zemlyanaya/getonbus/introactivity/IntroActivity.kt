@@ -28,7 +28,7 @@ class IntroActivity : FragmentActivity() {
         if(!isFirstLaunch)
             goToNextActivity()
 
-        prefs.isFirstLaunch.put(false)
+        //prefs.isFirstLaunch.put(false)
 
         setContentView(R.layout.activity_intro)
 
@@ -54,14 +54,15 @@ class IntroActivity : FragmentActivity() {
         adapter = ViewPagerFragmentAdapter(this)
         adapter.addFragment(SlideFragment(R.layout.intro_slide1))
         adapter.addFragment(SlideFragment(R.layout.intro_slide2))
+        adapter.addFragment(SlideFragment(R.layout.intro_slide3))
 
         viewPager2.orientation = ViewPager2.ORIENTATION_HORIZONTAL
 
         viewPager2.adapter = adapter
     }
 
-    fun setPrefFast(isFaster: Boolean){
-        prefs.faster.put(isFaster)
+    fun setPref(key: String, value: Any){
+        prefs.setPref(key, value)
     }
 
     fun goToNextActivity() = startActivity(Intent(this@IntroActivity, MainActivity::class.java))
