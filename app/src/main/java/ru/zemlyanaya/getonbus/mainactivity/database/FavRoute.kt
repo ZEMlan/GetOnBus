@@ -15,7 +15,7 @@ class FavRoute(
     @ColumnInfo
     val destination: String,
     @ColumnInfo
-    val icon:String?
+    val icon:Int
 ) : Serializable {
     init { key = (name+destination).hashCode() }
 }

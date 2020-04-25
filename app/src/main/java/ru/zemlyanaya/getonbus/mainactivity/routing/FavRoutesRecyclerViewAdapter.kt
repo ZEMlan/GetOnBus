@@ -13,7 +13,7 @@ import ru.zemlyanaya.getonbus.mainactivity.database.FavRoute
 class FavRoutesRecyclerViewAdapter constructor(private val onCardClickListener: (FavRoute) -> Unit):
     RecyclerView.Adapter<FavRoutesRecyclerViewAdapter.RouteCardViewHolder>() {
 
-    var favRoutes = ArrayList<FavRoute>()
+    private var favRoutes = ArrayList<FavRoute>()
 
     inner class RouteCardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val routeName: TextView = itemView.routeName
@@ -32,16 +32,7 @@ class FavRoutesRecyclerViewAdapter constructor(private val onCardClickListener: 
         holder.itemView.setOnClickListener { onCardClickListener.invoke(current) }
         holder.routeName.text = current.name
         holder.routeDestination.text = current.destination
-        holder.routeIcon.setImageResource(parseIcon(current.icon))
-    }
-
-
-    private fun parseIcon(iconName: String?): Int{
-        return when(iconName){
-            "home" -> R.drawable.ic_home
-            "work" -> R.drawable.ic_work
-            else -> R.drawable.ic_heart
-        }
+        holder.routeIcon.setImageResource(current.icon)
     }
 
     internal fun setData(routes: ArrayList<FavRoute>) {

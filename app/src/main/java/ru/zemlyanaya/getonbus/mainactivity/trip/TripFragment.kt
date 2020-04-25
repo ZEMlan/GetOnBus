@@ -6,14 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_trip.*
 import kotlinx.android.synthetic.main.fragment_trip.view.*
 import ru.zemlyanaya.getonbus.IOnBackPressed
 import ru.zemlyanaya.getonbus.R
+import ru.zemlyanaya.getonbus.mainactivity.MainViewModel
 
 
 private const val ARG_A = "a"
@@ -21,12 +22,13 @@ private const val ARG_B = "b"
 
 
 class TripFragment : Fragment(), IOnBackPressed {
+    private val viewModel: MainViewModel by activityViewModels()
+
     private var a: String? = null
     private var b: String? = null
 
     private var possibleRoutes: ArrayList<String>? = arrayListOf()
 
-    private lateinit var viewModel: TripViewModel
     private lateinit var adapter: TripBusRecyclerAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var textNow : TextView
@@ -66,7 +68,7 @@ class TripFragment : Fragment(), IOnBackPressed {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(TripViewModel::class.java)
+
         viewModel.possibleRoutes.observe(viewLifecycleOwner, Observer { routes ->
             possibleRoutes?.let {showPossibleRoutes(routes)}
         })

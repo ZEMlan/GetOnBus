@@ -8,8 +8,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.button.MaterialButton
 import com.kryptoprefs.preferences.KryptoBuilder
-import ru.zemlyanaya.getonbus.Keys
 import ru.zemlyanaya.getonbus.Prefs
+import ru.zemlyanaya.getonbus.PrefsConst
 import ru.zemlyanaya.getonbus.R
 import ru.zemlyanaya.getonbus.mainactivity.MainActivity
 
@@ -23,12 +23,12 @@ class IntroActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        prefs = Prefs(KryptoBuilder.hybrid(this, Keys.PREFS_NAME))
+        prefs = Prefs(KryptoBuilder.hybrid(this, PrefsConst.PREFS_NAME))
         val isFirstLaunch = prefs.isFirstLaunch.get()
         if(!isFirstLaunch)
             goToNextActivity()
 
-        //prefs.isFirstLaunch.put(false)
+        prefs.isFirstLaunch.put(false)
 
         setContentView(R.layout.activity_intro)
 

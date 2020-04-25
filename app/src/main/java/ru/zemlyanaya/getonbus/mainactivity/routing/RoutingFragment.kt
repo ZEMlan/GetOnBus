@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,32 +23,24 @@ import kotlinx.android.synthetic.main.fragment_routing.view.*
 import kotlinx.coroutines.*
 import ru.zemlyanaya.getonbus.IOnBackPressed
 import ru.zemlyanaya.getonbus.R
+import ru.zemlyanaya.getonbus.mainactivity.MainViewModel
 import ru.zemlyanaya.getonbus.mainactivity.database.FavRoute
 import java.io.IOException
 import java.net.InetSocketAddress
 import java.net.Socket
 
 
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [RoutingFragment.OnGoInteractionListener] interface
- * to handle interaction events.
- * [FavRoutesRecyclerViewAdapter.OnCardClickListener] interface
- * to handle OnCardClick events.
- * Use the [RoutingFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class RoutingFragment : Fragment(), IOnBackPressed {
 
-    private lateinit var viewModel: RoutingViewModel
+    private val viewModel: MainViewModel by activityViewModels()
+
     private lateinit var adapter: FavRoutesRecyclerViewAdapter
     private lateinit var recyclerView: RecyclerView
 
     private var favRoutes: ArrayList<FavRoute>? = arrayListOf()
+    private val icons = listOf(R.drawable.ic_heart, R.drawable.ic_home, R.drawable.ic_work)
 
     private var onGoListener: OnGoInteractionListener? = null
-
 
     private var fragmentJob = Job()
     private val fragmentScope = CoroutineScope(Dispatchers.Main + fragmentJob)
@@ -59,7 +51,6 @@ class RoutingFragment : Fragment(), IOnBackPressed {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(RoutingViewModel::class.java)
         viewModel.favRoutes.observe(viewLifecycleOwner, Observer { routes ->
             favRoutes?.let {dataChanged(routes)}
         })
@@ -140,7 +131,7 @@ class RoutingFragment : Fragment(), IOnBackPressed {
     private fun enableSwipeToEditAndUndo() {
         val swipeToDeleteCallback: SwipeToDeleteCallback = object : SwipeToDeleteCallback(recyclerView.context) {
             override fun onSwiped(@NonNull viewHolder: RecyclerView.ViewHolder, i: Int) {
-                val position = viewHolder.adapterPosition
+                val position = viewHolder.bindingAdapterPosition
                 val item: FavRoute = adapter.getData()[position]
                 adapter.removeItem(position)
                 view?.let { createEditDialog(item, position).show() }
@@ -158,18 +149,23 @@ class RoutingFragment : Fragment(), IOnBackPressed {
         val inputName: TextInputEditText = view.findViewById(R.id.textName)
         val inputTo: TextInputEditText = view.findViewById(R.id.textTo)
         val inputIcon: ImageButton = view.findViewById(R.id.dialogIcon)
+        var i = 0
+        inputIcon.setOnClickListener {
+            i = if(i == 2) 0 else ++i
+            inputIcon.setImageResource(icons[i])
+        }
 
         builder.setView(view)
             .setPositiveButton("Сохранить") { _, _ ->
                 try {
                     val name = inputName.text.toString()
                     val to = inputTo.text.toString()
-                    val icon = Icons.Heart
+                    val icon = icons[i]
 
                     if(name == "" || to == "")
                         throw Exception("Заполните все поля!")
 
-                    val route = FavRoute(DEFAULT_KEY, name, to, icon.name)
+                    val route = FavRoute(DEFAULT_KEY, name, to, icon)
                     viewModel.insert(route)
                 } catch (e: Exception) {
                     showError(e.message.orEmpty())
@@ -190,6 +186,12 @@ class RoutingFragment : Fragment(), IOnBackPressed {
         val inputTo: TextInputEditText = view.findViewById(R.id.textTo)
         inputTo.setText(route.destination)
         val inputIcon: ImageButton = view.findViewById(R.id.dialogIcon)
+        inputIcon.setImageResource(route.icon)
+        var i = 0
+        inputIcon.setOnClickListener {
+            i = if(i == 2) 0 else ++i
+            inputIcon.setImageResource(icons[i])
+        }
 
         builder.setView(view)
             .setPositiveButton("Изменить"
@@ -197,12 +199,12 @@ class RoutingFragment : Fragment(), IOnBackPressed {
                 try {
                     val name = inputName.text.toString()
                     val to = inputTo.text.toString()
-                    val icon = Icons.Heart
+                    val icon = icons[i]
 
                     if(name == "" || to == "")
                         throw Exception("Заполните все поля!")
 
-                    val newRoute = FavRoute(DEFAULT_KEY, name, to, icon.name)
+                    val newRoute = FavRoute(DEFAULT_KEY, name, to, icon)
                     viewModel.edit(route, newRoute)
                 } catch (e: Exception) {
                     showError(e.message.orEmpty())
@@ -258,17 +260,7 @@ class RoutingFragment : Fragment(), IOnBackPressed {
         }
     }
 
-    fun cancelJob() {
-        fragmentJob.cancel()
-    }
 
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     */
     interface OnGoInteractionListener {
         fun onGoInteraction(a: String, b: String)
     }

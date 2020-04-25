@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.head_bar.*
 import ru.zemlyanaya.getonbus.IOnBackPressed
@@ -16,14 +17,17 @@ import ru.zemlyanaya.getonbus.mainactivity.about.AboutFragment
 import ru.zemlyanaya.getonbus.mainactivity.routing.RoutingFragment
 import ru.zemlyanaya.getonbus.mainactivity.trip.TripFragment
 
+
 class MainActivity : FragmentActivity(), RoutingFragment.OnGoInteractionListener {
 
-
+    lateinit var mainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initHeader()
+
+        mainViewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
     }
 
 
