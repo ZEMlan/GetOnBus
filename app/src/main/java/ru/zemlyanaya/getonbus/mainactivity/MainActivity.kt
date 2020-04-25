@@ -47,18 +47,20 @@ class MainActivity : FragmentActivity(), RoutingFragment.OnGoInteractionListener
             TileMode.CLAMP
         )
         label.paint.shader = textShader
-        label.setOnClickListener { showAboutFragment() }
+        label.setOnClickListener {
+            val fragment = supportFragmentManager.findFragmentById(R.id.frameMain)
+            if(fragment is RoutingFragment)
+                showAboutFragment()
+            else
+                showRouteFragment()
+        }
 
         butProfile.setOnClickListener {
             val fragment = supportFragmentManager.findFragmentById(R.id.frameMain)
-            if(fragment is RoutingFragment) {
+            if(fragment is RoutingFragment)
                 showProfileFragment()
-                butProfile.setImageResource(R.drawable.ic_route)
-            }
-            else{
+            else
                 showRouteFragment()
-                butProfile.setImageResource(R.drawable.ic_account)
-            }
         }
         butMap.setOnClickListener { showMapFragment() }
 
@@ -76,22 +78,18 @@ class MainActivity : FragmentActivity(), RoutingFragment.OnGoInteractionListener
     private fun showMapFragment(){}
 
     private fun showProfileFragment(){
-        header.visibility = View.VISIBLE
         supportFragmentManager.beginTransaction()
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             .replace(R.id.frameMain, ProfileFragment())
-            .commitAllowingStateLoss()}
+            .commitAllowingStateLoss()
+        butProfile.setImageResource(R.drawable.ic_route)
+    }
 
     override fun onBackPressed() {
         val fragment = supportFragmentManager.findFragmentById(R.id.frameMain)
         (fragment as? IOnBackPressed)?.onBackPressed()?.let {
-            if(it) {
-                this.supportFragmentManager.beginTransaction()
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                    .replace(R.id.frameMain, RoutingFragment())
-                    .commitAllowingStateLoss()
-                header.visibility = View.VISIBLE
-            }
+            if(it)
+                showRouteFragment()
         }
 
     }
@@ -102,16 +100,15 @@ class MainActivity : FragmentActivity(), RoutingFragment.OnGoInteractionListener
             .replace(R.id.frameMain, AboutFragment())
             .addToBackStack(null)
             .commitAllowingStateLoss()
-        header.visibility = View.GONE
-
     }
 
     private fun showRouteFragment(){
         header.visibility = View.VISIBLE
         supportFragmentManager.beginTransaction()
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
             .replace(R.id.frameMain, RoutingFragment())
             .commitAllowingStateLoss()
+        butProfile.setImageResource(R.drawable.ic_account)
     }
 
 

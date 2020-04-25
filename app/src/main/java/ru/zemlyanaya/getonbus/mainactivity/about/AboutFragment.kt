@@ -44,9 +44,6 @@ class AboutFragment : Fragment(), IOnBackPressed {
         )
         label.paint.shader = textShader
 
-        val backButton = layout.butBack
-        backButton.setOnClickListener { activity?.onBackPressed() }
-
         //val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.UK)
 
         val textVersion = layout.textVersion
