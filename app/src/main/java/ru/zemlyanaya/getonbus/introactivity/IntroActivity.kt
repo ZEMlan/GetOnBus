@@ -40,11 +40,11 @@ class IntroActivity : FragmentActivity() {
 
         val butPrev : MaterialButton = findViewById(R.id.butPrev)
         butPrev.setOnClickListener {
-            viewPager2.currentItem = if (viewPager2.currentItem == 1) 0 else 0
+            viewPager2.currentItem = if (viewPager2.currentItem == 0) 0 else viewPager2.currentItem-1
         }
         val butNext : MaterialButton = findViewById(R.id.butNext)
         butNext.setOnClickListener {
-            viewPager2.currentItem = if (viewPager2.currentItem == 0) 1 else 1
+            viewPager2.currentItem = if (viewPager2.currentItem == 2) 2 else viewPager2.currentItem+1
         }
     }
 

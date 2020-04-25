@@ -17,7 +17,7 @@
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorAccent">@color/textAccentColor</item>
         <item name="android:fontFamily">monospace</item>
-        <item name="android:statusBarColor">@color/primaryDarkColor</item>
+        <item name="android:statusBarColor">#0840D7</item>
         <item name="colorControlHighlight">@color/rippleColor</item>
     </style>
 

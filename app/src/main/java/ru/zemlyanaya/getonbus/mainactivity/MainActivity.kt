@@ -33,7 +33,7 @@ class MainActivity : FragmentActivity(), RoutingFragment.OnGoInteractionListener
             0f,
             label.text.length.toFloat(),
             label.textSize,
-            intArrayOf(Color.rgb(60, 111, 250),
+            intArrayOf(Color.rgb(8, 64, 215),
                 Color.rgb(71, 120, 254),
                 Color.rgb(105, 155, 254),
                 Color.rgb(142, 173, 241)
