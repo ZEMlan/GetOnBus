@@ -9,12 +9,13 @@
     <application
         android:name=".App"
         android:allowBackup="true"
-        android:icon="@drawable/getonbus_icon"
+        android:icon="@drawable/ic_bus"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/getonbus_icon"
+        android:roundIcon="@drawable/ic_bus"
         android:supportsRtl="true">
         <activity android:name=".introactivity.IntroActivity"
-            android:theme="@style/AppTheme.IntroActivity">
+            android:theme="@style/AppTheme.IntroActivity"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -5,7 +5,9 @@ import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.graphics.Shader.TileMode
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProviders
@@ -22,6 +24,10 @@ import ru.zemlyanaya.getonbus.mainactivity.trip.TripFragment
 class MainActivity : FragmentActivity(), RoutingFragment.OnGoInteractionListener {
 
     lateinit var mainViewModel: MainViewModel
+
+    private var doubleBackToExitPressedOnce = false
+    private val mHandler: Handler = Handler()
+    private val mRunnable = Runnable { doubleBackToExitPressedOnce = false }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,11 +93,26 @@ class MainActivity : FragmentActivity(), RoutingFragment.OnGoInteractionListener
 
     override fun onBackPressed() {
         val fragment = supportFragmentManager.findFragmentById(R.id.frameMain)
-        (fragment as? IOnBackPressed)?.onBackPressed()?.let {
+        if(fragment is RoutingFragment)
+            onRouteFragmentBackPressed()
+        else {
+            (fragment as? IOnBackPressed)?.onBackPressed()?.let {
             if(it)
                 showRouteFragment()
+            }
+        }
+    }
+
+    private fun onRouteFragmentBackPressed(){
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            return
         }
 
+        doubleBackToExitPressedOnce = true
+        Toast.makeText(this, "Нажмите ещё раз для выхода", Toast.LENGTH_SHORT).show()
+
+        mHandler.postDelayed(mRunnable, 2000)
     }
 
     private fun showAboutFragment(){
@@ -111,5 +132,9 @@ class MainActivity : FragmentActivity(), RoutingFragment.OnGoInteractionListener
         butProfile.setImageResource(R.drawable.ic_account)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        mHandler.removeCallbacks(mRunnable)
+    }
 
 }
