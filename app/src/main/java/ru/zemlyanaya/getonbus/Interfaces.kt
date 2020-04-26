@@ -10,7 +10,7 @@ interface IOnBackPressed {
     fun onBackPressed(): Boolean
 }
 
-interface ServerApi{
+interface IServerApi{
     @GET("/getRoute")
     fun getRoute(
         @Query("From") from: Int,
@@ -24,6 +24,4 @@ interface ServerApi{
 
     @POST("/getStops")
     fun getAllStops(): Call<Stops>
-
-
 }

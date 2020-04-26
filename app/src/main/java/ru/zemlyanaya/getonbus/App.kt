@@ -3,7 +3,7 @@ package ru.zemlyanaya.getonbus
 import android.app.Application
 import com.kryptoprefs.preferences.KryptoBuilder
 import retrofit2.Retrofit
-import ru.zemlyanaya.getonbus.mainactivity.model.Stops
+import retrofit2.converter.jackson.JacksonConverterFactory
 
 
 class App : Application() {
@@ -15,36 +15,21 @@ class App : Application() {
 
         preferences = Prefs(KryptoBuilder.hybrid(this, PrefsConst.PREFS_NAME))
 
-//        retrofit = Retrofit.Builder()
-//            .baseUrl("") //TODO add base uri
-//            .addConverterFactory(JacksonConverterFactory.create())
-//            .build()
-//
-//        serverApi = retrofit.create(ServerApi::class.java)
+        retrofit = Retrofit.Builder()
+            .baseUrl("https://jsonplaceholder.typicode.com")
+            .addConverterFactory(JacksonConverterFactory.create())
+            .build()
 
-        getStops()
-    }
+        serverApi = retrofit.create(IServerApi::class.java) }
 
-    private fun getStops(){
-        try {
-            stopsObj = serverApi.getAllStops().execute().body()
-        }
-        catch (e: Exception){
-
-        }
-    }
 
     companion object {
         private lateinit var preferences : Prefs
         val prefs: Prefs
             get() = preferences
 
-        private lateinit var serverApi: ServerApi
-        val api: ServerApi
+        private lateinit var serverApi: IServerApi
+        val api: IServerApi
             get() = serverApi
-
-        private lateinit var stopsObj: Stops
-        val stops: Stops?
-            get() = stopsObj
     }
 }

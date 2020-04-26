@@ -37,7 +37,6 @@ class MainActivity : FragmentActivity(), RoutingFragment.OnGoInteractionListener
         mainViewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
     }
 
-
     private fun initHeader(){
         val textShader: Shader = LinearGradient(
             0f,

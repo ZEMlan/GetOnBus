@@ -20,14 +20,10 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.fragment_routing.*
 import kotlinx.android.synthetic.main.fragment_routing.view.*
-import kotlinx.coroutines.*
 import ru.zemlyanaya.getonbus.IOnBackPressed
 import ru.zemlyanaya.getonbus.R
 import ru.zemlyanaya.getonbus.mainactivity.MainViewModel
 import ru.zemlyanaya.getonbus.mainactivity.database.FavRoute
-import java.io.IOException
-import java.net.InetSocketAddress
-import java.net.Socket
 
 
 class RoutingFragment : Fragment(), IOnBackPressed {
@@ -41,9 +37,6 @@ class RoutingFragment : Fragment(), IOnBackPressed {
     private val icons = listOf(R.drawable.ic_heart, R.drawable.ic_home, R.drawable.ic_work)
 
     private var onGoListener: OnGoInteractionListener? = null
-
-    private var fragmentJob = Job()
-    private val fragmentScope = CoroutineScope(Dispatchers.Main + fragmentJob)
 
     override fun onBackPressed(): Boolean {
         return false
@@ -73,14 +66,9 @@ class RoutingFragment : Fragment(), IOnBackPressed {
 
         val butCheckConnection =  layout.butCheckConnection
         butCheckConnection.setOnClickListener {
-            fragmentScope.launch(Dispatchers.Main) {
-                textInternet.text = "проверяем"
-                val hasInternet = withContext(Dispatchers.IO) {
-                    Thread.sleep(1000L)
-                    hasInternetConnection()
-                }
-                textInternet.text = if(hasInternet) "есть" else "нет"
-            }
+            textInternet.text = "проверяем"
+            val hasInternet = viewModel.hasInternetConnection()
+            textInternet.text = if(hasInternet) "есть" else "нет"
         }
 
         adapter = FavRoutesRecyclerViewAdapter{
@@ -105,6 +93,14 @@ class RoutingFragment : Fragment(), IOnBackPressed {
         return layout
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val hasInternet = viewModel.hasInternetConnection()
+        if(hasInternet)
+            showWarning()
+    }
+
     private fun dataChanged(new: List<FavRoute>?){
         recyclerView.adapter = this.adapter
         adapter.setData(new.orEmpty() as ArrayList<FavRoute>)
@@ -126,6 +122,17 @@ class RoutingFragment : Fragment(), IOnBackPressed {
     override fun onDetach() {
         super.onDetach()
         onGoListener = null
+    }
+
+    private fun showWarning(){
+        val builder = androidx.appcompat.app.AlertDialog.Builder(layoutInflater.context)
+        builder.setTitle("ПРЕДУПРЕЖДЕНИЕ")
+            .setIcon(R.drawable.ic_warning)
+            .setMessage("Не удалось подключиться к серверу! Приложение не будет работать.\n\n" +
+                    "Проверьте интернет-соединение и перезагрузите приложение.")
+            .setPositiveButton("Понятно") { dialog, _ -> run { dialog.cancel() } }
+            .create()
+            .show()
     }
 
     private fun enableSwipeToEditAndUndo() {
@@ -243,23 +250,6 @@ class RoutingFragment : Fragment(), IOnBackPressed {
         Snackbar.make(recyclerView, e, Snackbar.LENGTH_SHORT)
             .show()
     }
-
-    private fun hasInternetConnection(): Boolean {
-        return try {
-            // Connect to Google DNS to check for connection
-            val timeoutMs = 1500
-            val socket = Socket()
-            val socketAddress = InetSocketAddress("8.8.8.8", 53)
-
-            socket.connect(socketAddress, timeoutMs)
-            socket.close()
-
-            true
-        } catch (e: IOException) {
-            false
-        }
-    }
-
 
     interface OnGoInteractionListener {
         fun onGoInteraction(a: String, b: String)
