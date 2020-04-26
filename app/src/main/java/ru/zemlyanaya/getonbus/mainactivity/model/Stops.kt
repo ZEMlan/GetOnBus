@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.*
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder("Stops")
-class StopsRespond {
+class Stops {
     @JsonProperty("Stops")
     var stops: List<Stop>? = null
 
@@ -28,7 +28,7 @@ class StopsRespond {
 @JsonPropertyOrder("ID", "Name", "Transport", "Routes", "Siblings")
 class Stop {
     @JsonProperty("ID")
-    var iD: Int? = null
+    var id: Int? = null
 
     @JsonProperty("Name")
     var name: String? = null

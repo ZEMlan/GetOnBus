@@ -1,8 +1,9 @@
 package ru.zemlyanaya.getonbus
 
 import android.app.Application
+import com.kryptoprefs.preferences.KryptoBuilder
 import retrofit2.Retrofit
-import retrofit2.converter.jackson.JacksonConverterFactory
+import ru.zemlyanaya.getonbus.mainactivity.model.Stops
 
 
 class App : Application() {
@@ -11,17 +12,39 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        retrofit = Retrofit.Builder()
-            .baseUrl("https://umorili.herokuapp.com")
-            .addConverterFactory(JacksonConverterFactory.create())
-            .build()
-        serverApi =
-            retrofit.create(ServerApi::class.java)
+
+        preferences = Prefs(KryptoBuilder.hybrid(this, PrefsConst.PREFS_NAME))
+
+//        retrofit = Retrofit.Builder()
+//            .baseUrl("") //TODO add base uri
+//            .addConverterFactory(JacksonConverterFactory.create())
+//            .build()
+//
+//        serverApi = retrofit.create(ServerApi::class.java)
+
+        getStops()
+    }
+
+    private fun getStops(){
+        try {
+            stopsObj = serverApi.getAllStops().execute().body()
+        }
+        catch (e: Exception){
+
+        }
     }
 
     companion object {
+        private lateinit var preferences : Prefs
+        val prefs: Prefs
+            get() = preferences
+
         private lateinit var serverApi: ServerApi
         val api: ServerApi
             get() = serverApi
+
+        private lateinit var stopsObj: Stops
+        val stops: Stops?
+            get() = stopsObj
     }
 }

@@ -7,15 +7,13 @@ import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.button.MaterialButton
-import com.kryptoprefs.preferences.KryptoBuilder
-import ru.zemlyanaya.getonbus.Prefs
-import ru.zemlyanaya.getonbus.PrefsConst
+import ru.zemlyanaya.getonbus.App.Companion.prefs
 import ru.zemlyanaya.getonbus.R
 import ru.zemlyanaya.getonbus.mainactivity.MainActivity
 
 
 class IntroActivity : FragmentActivity() {
-    private lateinit var prefs : Prefs
+
 
     private lateinit var viewPager2 : ViewPager2
     private lateinit var adapter: ViewPagerFragmentAdapter
@@ -23,7 +21,6 @@ class IntroActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        prefs = Prefs(KryptoBuilder.hybrid(this, PrefsConst.PREFS_NAME))
         val isFirstLaunch = prefs.isFirstLaunch.get()
         if(!isFirstLaunch)
             goToNextActivity()
@@ -66,4 +63,5 @@ class IntroActivity : FragmentActivity() {
     }
 
     fun goToNextActivity() = startActivity(Intent(this@IntroActivity, MainActivity::class.java))
+
 }
