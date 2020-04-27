@@ -1,6 +1,7 @@
 package ru.zemlyanaya.getonbus.mainactivity.routing
 
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -123,6 +124,15 @@ class RoutingFragment : Fragment(), IOnBackPressed {
 
     private fun onGo(a: String, b: String ) {
         onGoListener?.onGoInteraction(a, b)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnGoInteractionListener) {
+            onGoListener = context
+        } else {
+            throw RuntimeException("$context must implement OnFragmentInteractionListener")
+        }
     }
 
     override fun onDetach() {
