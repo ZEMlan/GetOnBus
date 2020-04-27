@@ -1,15 +1,15 @@
 package ru.zemlyanaya.getonbus.mainactivity.routing
 
 import android.app.AlertDialog
-import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -22,13 +22,12 @@ import kotlinx.android.synthetic.main.fragment_routing.*
 import kotlinx.android.synthetic.main.fragment_routing.view.*
 import ru.zemlyanaya.getonbus.IOnBackPressed
 import ru.zemlyanaya.getonbus.R
-import ru.zemlyanaya.getonbus.mainactivity.MainViewModel
 import ru.zemlyanaya.getonbus.mainactivity.database.FavRoute
 
 
 class RoutingFragment : Fragment(), IOnBackPressed {
 
-    private val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: RoutingViewModel by viewModels()
 
     private lateinit var adapter: FavRoutesRecyclerViewAdapter
     private lateinit var recyclerView: RecyclerView
@@ -44,8 +43,16 @@ class RoutingFragment : Fragment(), IOnBackPressed {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         viewModel.favRoutes.observe(viewLifecycleOwner, Observer { routes ->
             favRoutes?.let {dataChanged(routes)}
+        })
+
+        viewModel.postLiveData.observe(viewLifecycleOwner, Observer { posts ->
+            if (posts != null)
+                Log.d("SUCSESS", posts[0].title+"!!!!!")
+            else
+                Log.d("FAILURE", "Nothing")
         })
     }
 
@@ -93,13 +100,6 @@ class RoutingFragment : Fragment(), IOnBackPressed {
         return layout
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val hasInternet = viewModel.hasInternetConnection()
-        if(hasInternet)
-            showWarning()
-    }
 
     private fun dataChanged(new: List<FavRoute>?){
         recyclerView.adapter = this.adapter
@@ -108,15 +108,6 @@ class RoutingFragment : Fragment(), IOnBackPressed {
 
     private fun onGo(a: String, b: String ) {
         onGoListener?.onGoInteraction(a, b)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnGoInteractionListener) {
-            onGoListener = context
-        } else {
-            throw RuntimeException("$context must implement OnFragmentInteractionListener")
-        }
     }
 
     override fun onDetach() {

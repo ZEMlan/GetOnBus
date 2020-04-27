@@ -18,7 +18,10 @@ class SlideFragment(private val layoutID : Int) : Fragment() {
     ): View? {
         lateinit var layout : View
         when (layoutID) {
-            R.layout.intro_slide1 -> layout = inflater.inflate(R.layout.intro_slide1, container, false)
+            R.layout.intro_slide1 -> {
+                layout = inflater.inflate(R.layout.intro_slide1, container, false)
+
+            }
 
             R.layout.intro_slide2 -> {
                 layout = inflater.inflate(R.layout.intro_slide2, container, false)

@@ -14,7 +14,6 @@ import kotlinx.android.synthetic.main.fragment_trip.*
 import kotlinx.android.synthetic.main.fragment_trip.view.*
 import ru.zemlyanaya.getonbus.IOnBackPressed
 import ru.zemlyanaya.getonbus.R
-import ru.zemlyanaya.getonbus.mainactivity.MainViewModel
 
 
 private const val ARG_A = "a"
@@ -22,7 +21,7 @@ private const val ARG_B = "b"
 
 
 class TripFragment : Fragment(), IOnBackPressed {
-    private val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: TripViewModel by activityViewModels()
 
     private var a: String? = null
     private var b: String? = null

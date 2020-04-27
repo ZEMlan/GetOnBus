@@ -1,9 +1,7 @@
 package ru.zemlyanaya.getonbus.introactivity
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.button.MaterialButton
@@ -28,10 +26,6 @@ class IntroActivity : FragmentActivity() {
         prefs.isFirstLaunch.put(false)
 
         setContentView(R.layout.activity_intro)
-
-        // Making notification bar transparent
-        if (Build.VERSION.SDK_INT >= 21)
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
         setViewPager()
 

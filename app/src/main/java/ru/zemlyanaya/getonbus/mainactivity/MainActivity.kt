@@ -10,7 +10,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.head_bar.*
 import ru.zemlyanaya.getonbus.IOnBackPressed
@@ -23,8 +22,6 @@ import ru.zemlyanaya.getonbus.mainactivity.trip.TripFragment
 
 class MainActivity : FragmentActivity(), RoutingFragment.OnGoInteractionListener {
 
-    lateinit var mainViewModel: MainViewModel
-
     private var doubleBackToExitPressedOnce = false
     private val mHandler: Handler = Handler()
     private val mRunnable = Runnable { doubleBackToExitPressedOnce = false }
@@ -33,8 +30,6 @@ class MainActivity : FragmentActivity(), RoutingFragment.OnGoInteractionListener
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initHeader()
-
-        mainViewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
     }
 
     private fun initHeader(){
