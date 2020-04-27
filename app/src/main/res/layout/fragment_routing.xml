@@ -35,15 +35,17 @@
         app:layout_constraintStart_toEndOf="@+id/textView"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <AutoCompleteTextView
             android:id="@+id/textA"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:inputType="text"
-            android:singleLine="true"
-            android:textColor="@color/textColor"
-            android:textSize="17sp" />
-
+            android:layout_weight="1"
+            android:ems="2"
+            android:imeOptions="actionSearch"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:popupBackground="@color/backgroundColor"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textview.MaterialTextView
@@ -71,15 +73,18 @@
         app:layout_constraintStart_toEndOf="@+id/textView1"
         app:layout_constraintTop_toBottomOf="@+id/inputLayoutA">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <AutoCompleteTextView
             android:id="@+id/textB"
+            style="@style/Base.Widget.MaterialComponents.AutoCompleteTextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:inputType="text"
-            android:singleLine="true"
-            android:textColor="@color/textColor"
-            android:textSize="17sp" />
-
+            android:layout_weight="1"
+            android:ems="2"
+            android:imeOptions="actionSearch"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:popupBackground="@color/backgroundColor"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

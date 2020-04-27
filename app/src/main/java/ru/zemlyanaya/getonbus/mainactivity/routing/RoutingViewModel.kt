@@ -8,7 +8,6 @@ import kotlinx.coroutines.*
 import ru.zemlyanaya.getonbus.mainactivity.database.AppDatabase
 import ru.zemlyanaya.getonbus.mainactivity.database.FavRoute
 import ru.zemlyanaya.getonbus.mainactivity.model.DeviceRepository
-import ru.zemlyanaya.getonbus.mainactivity.model.PlaceholderPosts
 import ru.zemlyanaya.getonbus.mainactivity.model.RemoteRepository
 import java.io.IOException
 import java.net.InetSocketAddress
@@ -27,7 +26,7 @@ class RoutingViewModel(app: Application) : AndroidViewModel(app) {
     private val remoteRepository = RemoteRepository()
 
     //val stopsLiveData = MutableLiveData<MutableList<String?>>()
-    val postLiveData = MutableLiveData<List<PlaceholderPosts>?>()
+    val postLiveData = MutableLiveData<ArrayList<String>?>()
 
     private val deviceRepository: DeviceRepository
     val favRoutes: LiveData<List<FavRoute>?>
@@ -83,7 +82,9 @@ class RoutingViewModel(app: Application) : AndroidViewModel(app) {
     fun fetchPosts(){
         scope.launch {
             val posts = remoteRepository.getPosts()
-            postLiveData.postValue(posts)
+            val mutableList = ArrayList<String>()
+            posts?.forEach { post -> if (post.title != null) mutableList.add(post.title!!)  }
+            postLiveData.postValue(mutableList)
         }
     }
 

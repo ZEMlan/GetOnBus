@@ -6,6 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.ImageButton
 import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
@@ -31,8 +33,11 @@ class RoutingFragment : Fragment(), IOnBackPressed {
 
     private lateinit var adapter: FavRoutesRecyclerViewAdapter
     private lateinit var recyclerView: RecyclerView
-
     private var favRoutes: ArrayList<FavRoute>? = arrayListOf()
+
+    private lateinit var stopsSearchAdapter: ArrayAdapter<String>
+    private var stops: MutableList<String> = ArrayList()
+
     private val icons = listOf(R.drawable.ic_heart, R.drawable.ic_home, R.drawable.ic_work)
 
     private var onGoListener: OnGoInteractionListener? = null
@@ -49,8 +54,12 @@ class RoutingFragment : Fragment(), IOnBackPressed {
         })
 
         viewModel.postLiveData.observe(viewLifecycleOwner, Observer { posts ->
-            if (posts != null)
-                Log.d("SUCSESS", posts[0].title+"!!!!!")
+            if (posts != null) {
+                Log.d("SUCSESS", posts[0])
+                this.stops = posts
+                stopsSearchAdapter.clear()
+                stopsSearchAdapter.addAll(posts)
+            }
             else
                 Log.d("FAILURE", "Nothing")
         })
@@ -77,6 +86,12 @@ class RoutingFragment : Fragment(), IOnBackPressed {
             val hasInternet = viewModel.hasInternetConnection()
             textInternet.text = if(hasInternet) "есть" else "нет"
         }
+
+        val autoTextA = layout.textA
+        val autoTextB = layout.textB
+        stopsSearchAdapter = ArrayAdapter(layout.context, android.R.layout.select_dialog_item, stops)
+        autoTextA.setAdapter(stopsSearchAdapter)
+        autoTextB.setAdapter(stopsSearchAdapter)
 
         adapter = FavRoutesRecyclerViewAdapter{
             textB.setText(it.destination)
@@ -145,7 +160,8 @@ class RoutingFragment : Fragment(), IOnBackPressed {
         val view = inflater.inflate(R.layout.add_fav_route_dialog, null)
 
         val inputName: TextInputEditText = view.findViewById(R.id.textName)
-        val inputTo: TextInputEditText = view.findViewById(R.id.textTo)
+        val inputTo: AutoCompleteTextView = view.findViewById(R.id.textTo)
+        inputTo.setAdapter(stopsSearchAdapter)
         val inputIcon: ImageButton = view.findViewById(R.id.dialogIcon)
         var i = 0
         inputIcon.setOnClickListener {
@@ -181,7 +197,8 @@ class RoutingFragment : Fragment(), IOnBackPressed {
 
         val inputName: TextInputEditText = view.findViewById(R.id.textName)
         inputName.setText(route.name)
-        val inputTo: TextInputEditText = view.findViewById(R.id.textTo)
+        val inputTo: AutoCompleteTextView = view.findViewById(R.id.textTo)
+        inputTo.setAdapter(stopsSearchAdapter)
         inputTo.setText(route.destination)
         val inputIcon: ImageButton = view.findViewById(R.id.dialogIcon)
         inputIcon.setImageResource(route.icon)
