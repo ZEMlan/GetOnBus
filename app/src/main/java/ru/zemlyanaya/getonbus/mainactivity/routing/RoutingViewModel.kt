@@ -79,7 +79,7 @@ class RoutingViewModel(app: Application) : AndroidViewModel(app) {
 //        }
 //    }
 
-    fun fetchPosts(){
+    private fun fetchPosts(){
         scope.launch {
             val posts = remoteRepository.getPosts()
             val mutableList = ArrayList<String>()

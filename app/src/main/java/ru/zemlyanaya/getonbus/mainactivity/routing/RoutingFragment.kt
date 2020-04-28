@@ -3,13 +3,13 @@ package ru.zemlyanaya.getonbus.mainactivity.routing
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -55,14 +55,13 @@ class RoutingFragment : Fragment(), IOnBackPressed {
         })
 
         viewModel.postLiveData.observe(viewLifecycleOwner, Observer { posts ->
-            if (posts != null) {
-                Log.d("SUCSESS", posts[0])
+            if (posts != null && posts.isNotEmpty()) {
                 this.stops = posts
                 stopsSearchAdapter.clear()
                 stopsSearchAdapter.addAll(posts)
             }
             else
-                Log.d("FAILURE", "Nothing")
+                showWarning()
         })
     }
 
@@ -76,7 +75,10 @@ class RoutingFragment : Fragment(), IOnBackPressed {
         butGo.setOnClickListener {
             val from = textA.text.toString()
             val to = textB.text.toString()
-            onGo(from, to)
+            if (from == "" || to == "")
+                showError("Заполните все поля!")
+            else
+                onGo(from, to)
         }
 
         val textInternet = layout.textInternet
@@ -267,7 +269,7 @@ class RoutingFragment : Fragment(), IOnBackPressed {
     }
 
     private fun showError(e: String){
-        Snackbar.make(recyclerView, e, Snackbar.LENGTH_SHORT)
+        Toast.makeText(recyclerView.context, e, Toast.LENGTH_SHORT)
             .show()
     }
 

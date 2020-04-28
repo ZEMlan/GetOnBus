@@ -1,9 +1,28 @@
 package ru.zemlyanaya.getonbus.mainactivity.model
 
-import ru.zemlyanaya.getonbus.App.Companion.api
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.jackson.JacksonConverterFactory
 
 
 class RemoteRepository: BaseRemoteRepository(){
+
+    private val tempApi: PlaceholderApi = Retrofit.Builder()
+        .client(OkHttpClient().newBuilder().build())
+        .baseUrl("https://jsonplaceholder.typicode.com")
+        .addCallAdapterFactory(CoroutineCallAdapterFactory())
+        .addConverterFactory(JacksonConverterFactory.create())
+        .build()
+        .create(PlaceholderApi::class.java)
+
+//       val serverApi = Retrofit.Builder()
+//            .client(OkHttpClient().newBuilder().build())
+//            .baseUrl("https://unknown")
+//            .addCallAdapterFactory(CoroutineCallAdapterFactory())
+//            .addConverterFactory(JacksonConverterFactory.create())
+//            .build()
+//            .create(IServerApi::class.java)
 
 //     suspend fun getAllStops(): MutableList<String?>? {
 //        val stopsRespond = safeApiCall(
@@ -14,9 +33,7 @@ class RemoteRepository: BaseRemoteRepository(){
 //        return stopsRespond?.getStopsList()
 //    }
 
-    suspend fun getPosts() : List<PlaceholderPosts>? {
-        return safeApiCall(
-        call = { api.getPostsAsync().await() },
-        errorMessage = "")
-    }
+    suspend fun getPosts() : List<PlaceholderPosts>? = safeApiCall(
+        call = { tempApi.getPostsAsync().await() },
+        errorMessage = "Не удалось подключиться к серверу!")
 }
