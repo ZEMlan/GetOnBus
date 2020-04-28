@@ -2,10 +2,7 @@ package ru.zemlyanaya.getonbus.mainactivity.trip
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.*
 import ru.zemlyanaya.getonbus.mainactivity.model.RemoteRepository
 import kotlin.coroutines.CoroutineContext
 import kotlin.random.Random
@@ -24,11 +21,23 @@ class TripViewModel : ViewModel() {
 
     fun cancelAllRequests() = coroutineContext.cancel()
 
-    // Temp fun for data flow imitation
     fun nextInstruction() {
-        if (Random.nextBoolean())
-            possibleRoutes.value = listOf("1", "34", "057", "082")
-        else
-            currentInstruction.value = "Идите до места назначения пешком"
+        scope.launch {
+            val routs: MutableList<String> = ArrayList()
+            val posts = repository.getPosts()
+            var i = Random.nextInt(2, 6)
+            while(i-- != 0){
+                routs.add(posts?.get(Random.nextInt(0, 50))?.id.toString())
+            }
+            possibleRoutes.postValue(routs as List<String>)
+        }
+    }
+
+    fun nextInstruction(number: Int){
+        scope.launch {
+            val posts = repository.getPosts()
+            val max = posts!!.size
+            currentInstruction.postValue(posts[Random.nextInt(0, max)].title)
+        }
     }
 }

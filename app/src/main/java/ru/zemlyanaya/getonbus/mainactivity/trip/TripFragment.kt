@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import kotlinx.android.synthetic.main.fragment_trip.*
 import kotlinx.android.synthetic.main.fragment_trip.view.*
 import ru.zemlyanaya.getonbus.IOnBackPressed
@@ -30,7 +32,9 @@ class TripFragment : Fragment(), IOnBackPressed {
 
     private lateinit var adapter: TripBusRecyclerAdapter
     private lateinit var recyclerView: RecyclerView
-    private lateinit var textNow : TextView
+    private lateinit var textNow: TextView
+    private lateinit var butNextStep: MaterialButton
+    private lateinit var imageWalk: ImageView
 
     override fun onBackPressed(): Boolean {
         return butBack.isPressed
@@ -53,11 +57,14 @@ class TripFragment : Fragment(), IOnBackPressed {
         butBack.setOnClickListener { activity?.onBackPressed() }
 
         textNow = layout.textNow
-        textNow.setOnClickListener { viewModel.nextInstruction() }
+        imageWalk = layout.imageWalk
+
+        butNextStep = layout.butNextStep
+        butNextStep.setOnClickListener { viewModel.nextInstruction() }
 
         recyclerView = layout.tripRecyclerView
         adapter = TripBusRecyclerAdapter {
-            viewModel.nextInstruction()
+            viewModel.nextInstruction(it)
         }
         recyclerView.layoutManager = LinearLayoutManager(layout.context)
         recyclerView.adapter = adapter
@@ -78,6 +85,8 @@ class TripFragment : Fragment(), IOnBackPressed {
 
     private fun showPossibleRoutes(new: List<String>?){
         textNow.text = "Сядьте на один из маршрутов:"
+        imageWalk.visibility = View.GONE
+        butNextStep.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
         recyclerView.adapter = this.adapter
         adapter.setData(new.orEmpty())
@@ -85,6 +94,8 @@ class TripFragment : Fragment(), IOnBackPressed {
 
     private fun showCurrentInstructions(new : String){
         recyclerView.visibility = View.GONE
+        imageWalk.visibility = View.VISIBLE
+        butNextStep.visibility = View.VISIBLE
         textNow.text = new
     }
 

@@ -16,7 +16,7 @@ import kotlin.coroutines.CoroutineContext
 
 class RoutingViewModel(app: Application) : AndroidViewModel(app) {
 
-    private var connection = false
+    val connection : MutableLiveData<Boolean> = MutableLiveData(false)
 
     private val parentJob = Job()
     private val coroutineContext: CoroutineContext
@@ -53,9 +53,10 @@ class RoutingViewModel(app: Application) : AndroidViewModel(app) {
         deviceRepository.edit(oldRoute, newRoute)
     }
 
-    fun hasInternetConnection(): Boolean {
+    fun hasInternetConnection() {
         scope.launch(Dispatchers.IO) {
-            connection = try {
+            try {
+                Thread.sleep(500L)
                 // Connect to Google DNS to check for connection
                 val timeoutMs = 1500
                 val socket = Socket()
@@ -64,12 +65,11 @@ class RoutingViewModel(app: Application) : AndroidViewModel(app) {
                 socket.connect(socketAddress, timeoutMs)
                 socket.close()
 
-                true
+                connection.postValue(true)
             } catch (e: IOException) {
-                false
+                connection.postValue(false)
             }
         }
-        return connection
     }
 
 //    fun fetchStops(){

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.bus_card.view.*
 import ru.zemlyanaya.getonbus.R
 
-class TripBusRecyclerAdapter constructor(private val onCardClickListener: (String) -> Unit):
+class TripBusRecyclerAdapter constructor(private val onCardClickListener: (Int) -> Unit):
     RecyclerView.Adapter<TripBusRecyclerAdapter.RouteCardViewHolder>() {
 
         var routes = emptyList<String>()
@@ -25,7 +25,7 @@ class TripBusRecyclerAdapter constructor(private val onCardClickListener: (Strin
 
         override fun onBindViewHolder(holder: RouteCardViewHolder, position: Int) {
             val current = routes[position]
-            holder.itemView.setOnClickListener { onCardClickListener.invoke(current) }
+            holder.itemView.setOnClickListener { onCardClickListener.invoke(current.toInt()) }
             holder.route.text = current
         }
 

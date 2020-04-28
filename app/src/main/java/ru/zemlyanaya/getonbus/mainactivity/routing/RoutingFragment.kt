@@ -83,9 +83,11 @@ class RoutingFragment : Fragment(), IOnBackPressed {
 
         val butCheckConnection =  layout.butCheckConnection
         butCheckConnection.setOnClickListener {
+            viewModel.connection.observe(viewLifecycleOwner, Observer { isConnected ->
+                textInternet.text = if(isConnected) "есть" else "нет"
+            })
             textInternet.text = "проверяем"
-            val hasInternet = viewModel.hasInternetConnection()
-            textInternet.text = if(hasInternet) "есть" else "нет"
+            viewModel.hasInternetConnection()
         }
 
         val autoTextA = layout.textA
