@@ -13,8 +13,8 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,19 +26,27 @@ import kotlinx.android.synthetic.main.fragment_routing.*
 import kotlinx.android.synthetic.main.fragment_routing.view.*
 import ru.zemlyanaya.getonbus.IOnBackPressed
 import ru.zemlyanaya.getonbus.R
+import ru.zemlyanaya.getonbus.Status
+import ru.zemlyanaya.getonbus.mainactivity.ViewModelFactory
+import ru.zemlyanaya.getonbus.mainactivity.data.api.RetrofitBuilder
+import ru.zemlyanaya.getonbus.mainactivity.data.model.StopsRespond
+import ru.zemlyanaya.getonbus.mainactivity.database.AppDatabase
 import ru.zemlyanaya.getonbus.mainactivity.database.FavRoute
 
 
 class RoutingFragment : Fragment(), IOnBackPressed {
 
-    private val viewModel: RoutingViewModel by viewModels()
+    private var isASelected = false
+    private var isBSelected = false
+
+    private lateinit var viewModel: RoutingViewModel
 
     private lateinit var adapter: FavRoutesRecyclerViewAdapter
     private lateinit var recyclerView: RecyclerView
     private var favRoutes: ArrayList<FavRoute>? = arrayListOf()
 
     private lateinit var stopsSearchAdapter: ArrayAdapter<String>
-    private var stops: MutableList<String> = ArrayList()
+    private var stops = ArrayList<String>()
 
     private val icons = listOf(R.drawable.ic_heart, R.drawable.ic_home, R.drawable.ic_work)
 
@@ -46,24 +54,6 @@ class RoutingFragment : Fragment(), IOnBackPressed {
 
     override fun onBackPressed(): Boolean {
         return false
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        viewModel.favRoutes.observe(viewLifecycleOwner, Observer { routes ->
-            favRoutes?.let {dataChanged(routes)}
-        })
-
-        viewModel.postLiveData.observe(viewLifecycleOwner, Observer { posts ->
-            if (posts != null && posts.isNotEmpty()) {
-                this.stops = posts
-                stopsSearchAdapter.clear()
-                stopsSearchAdapter.addAll(posts)
-            }
-            else
-                showWarning()
-        })
     }
 
     override fun onCreateView(
@@ -78,6 +68,8 @@ class RoutingFragment : Fragment(), IOnBackPressed {
             val to = textB.text.toString()
             if (from == "" || to == "")
                 showError("Заполните все поля!")
+            else if (!isASelected or !isBSelected)
+                showError("Выберите точки из списка!")
             else
                 onGo(from, to)
         }
@@ -97,9 +89,13 @@ class RoutingFragment : Fragment(), IOnBackPressed {
         val autoTextB = layout.textB
         stopsSearchAdapter = ArrayAdapter(layout.context, android.R.layout.select_dialog_item, stops)
         autoTextA.setAdapter(stopsSearchAdapter)
+        autoTextA.setOnItemClickListener {_, _, _, _ -> isASelected = true}
+
         autoTextB.setAdapter(stopsSearchAdapter)
+        autoTextB.setOnItemClickListener {_, _, _, _ -> isBSelected = true}
 
         adapter = FavRoutesRecyclerViewAdapter{
+            isBSelected = true
             textB.setText(it.destination)
         }
 
@@ -119,6 +115,42 @@ class RoutingFragment : Fragment(), IOnBackPressed {
         val fab: FloatingActionButton = layout.findViewById(R.id.favFab)
         fab.setOnClickListener { createAddDialog().show() }
         return layout
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        viewModel = ViewModelProviders.of(
+            this,
+            ViewModelFactory(RetrofitBuilder.apiService,
+                AppDatabase.getDatabase(requireActivity()).favRouteDao())
+        ).get(RoutingViewModel::class.java)
+
+        viewModel.favRoutes.observe(viewLifecycleOwner, Observer { routes ->
+            favRoutes?.let {dataChanged(routes)}
+        })
+
+        viewModel.getStops().observe(viewLifecycleOwner, Observer { resource ->
+            when(resource.status){
+                Status.ERROR -> showWarning()
+                Status.SUCCESS -> {
+                    this.stops = getStops(resource.data!!.stops!!)
+                    updateSearchList()
+                }
+                else -> {}
+            }
+        })
+    }
+
+    private fun updateSearchList(){
+        stopsSearchAdapter.clear()
+        stopsSearchAdapter.addAll(stops)
+    }
+
+    private fun getStops(data: List<StopsRespond.Stop>): ArrayList<String>{
+        val list = ArrayList<String>()
+        data.forEach { stop -> list.add(stop.name!!) }
+        return list
     }
 
 
@@ -246,8 +278,6 @@ class RoutingFragment : Fragment(), IOnBackPressed {
                 } catch (e: Exception) {
                     showError(e.message.orEmpty())
                     viewModel.insert(route)
-//                    adapter.restoreItem(route, position)
-//                    recyclerView.scrollToPosition(position)
                 }
             }
             .setNeutralButton(

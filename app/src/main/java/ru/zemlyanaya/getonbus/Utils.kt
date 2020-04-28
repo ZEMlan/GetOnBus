@@ -1,34 +1,24 @@
 package ru.zemlyanaya.getonbus
 
-import kotlinx.coroutines.Deferred
-import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
-import ru.zemlyanaya.getonbus.mainactivity.model.Stops
 
-enum class RequestStatus{
-    LOADING,
-    SUCCESS,
-    ERROR
-}
 
 interface IOnBackPressed {
     fun onBackPressed(): Boolean
 }
 
-interface IServerApi{
-    @GET("/getRoute")
-    fun getRoute(
-        @Query("From") from: Int,
-        @Query("To") to: Int,
-        @Query("Allowed transport") transport: List<String>,
-        @Query("Routing") mode: String
-    ): Deferred<Response<List<String>>>
+enum class Status {
+    SUCCESS,
+    ERROR,
+    LOADING
+}
 
-    @POST("/getNames")
-    fun getNamesByID(@Query("Names") names: List<Int>): Deferred<Response<String>>
+data class Resource<out T>(val status: Status, val data: T?, val message: String?) {
+    companion object {
+        fun <T> success(data: T): Resource<T> = Resource(status = Status.SUCCESS, data = data, message = null)
 
-    @POST("/getStops")
-    fun getAllStopsAsync(): Deferred<Response<Stops>>
+        fun <T> error(data: T?, message: String): Resource<T> =
+            Resource(status = Status.ERROR, data = data, message = message)
+
+        fun <T> loading(data: T?): Resource<T> = Resource(status = Status.LOADING, data = data, message = null)
+    }
 }

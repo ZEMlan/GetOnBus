@@ -1,20 +1,26 @@
 package ru.zemlyanaya.getonbus.mainactivity.routing
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
+
 import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.*
-import ru.zemlyanaya.getonbus.mainactivity.database.AppDatabase
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import ru.zemlyanaya.getonbus.Resource
+import ru.zemlyanaya.getonbus.mainactivity.data.repository.DeviceRepository
+import ru.zemlyanaya.getonbus.mainactivity.data.repository.RemoteRepository
 import ru.zemlyanaya.getonbus.mainactivity.database.FavRoute
-import ru.zemlyanaya.getonbus.mainactivity.model.DeviceRepository
-import ru.zemlyanaya.getonbus.mainactivity.model.RemoteRepository
 import java.io.IOException
 import java.net.InetSocketAddress
 import java.net.Socket
 import kotlin.coroutines.CoroutineContext
 
-class RoutingViewModel(app: Application) : AndroidViewModel(app) {
+class RoutingViewModel(
+    private val remoteRepository: RemoteRepository,
+    private val deviceRepository: DeviceRepository
+    ) : ViewModel() {
 
     val connection : MutableLiveData<Boolean> = MutableLiveData(false)
 
@@ -23,33 +29,17 @@ class RoutingViewModel(app: Application) : AndroidViewModel(app) {
         get() = parentJob + Dispatchers.Default
     private val scope = CoroutineScope(coroutineContext)
 
-    private val remoteRepository = RemoteRepository()
+    val favRoutes = deviceRepository.allFavRoutes
 
-    //val stopsLiveData = MutableLiveData<MutableList<String?>>()
-    val postLiveData = MutableLiveData<ArrayList<String>?>()
-
-    private val deviceRepository: DeviceRepository
-    val favRoutes: LiveData<List<FavRoute>?>
-
-    init {
-        val favRouteDao = AppDatabase.getDatabase(app).favRouteDao()
-        deviceRepository =
-            DeviceRepository(
-                favRouteDao
-            )
-        favRoutes = deviceRepository.allFavRoutes
-        fetchPosts()
-    }
-
-    fun insert(route: FavRoute) = GlobalScope.launch {
+    fun insert(route: FavRoute) = scope.launch {
         deviceRepository.insert(route)
     }
 
-    fun delete(route: FavRoute) = GlobalScope.launch {
+    fun delete(route: FavRoute) = scope.launch {
         deviceRepository.delete(route)
     }
 
-    fun edit(oldRoute: FavRoute, newRoute: FavRoute) = GlobalScope.launch {
+    fun edit(oldRoute: FavRoute, newRoute: FavRoute) = scope.launch {
         deviceRepository.edit(oldRoute, newRoute)
     }
 
@@ -72,20 +62,15 @@ class RoutingViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-//    fun fetchStops(){
-//        scope.launch {
-//            val stops = remoteRepository.getAllStops()
-//            stopsLiveData.postValue(stops)
-//        }
-//    }
 
-    private fun fetchPosts(){
-        scope.launch {
-            val posts = remoteRepository.getPosts()
-            val mutableList = ArrayList<String>()
-            posts?.forEach { post -> if (post.title != null) mutableList.add(post.title!!)  }
-            postLiveData.postValue(mutableList)
+    fun getStops() = liveData(Dispatchers.IO) {
+        emit(Resource.loading(data = null))
+        try {
+            emit(Resource.success(data = remoteRepository.getAllStops()))
+        } catch (exception: Exception) {
+            emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
         }
     }
+
 
 }

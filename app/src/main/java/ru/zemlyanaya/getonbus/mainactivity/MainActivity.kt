@@ -70,7 +70,7 @@ class MainActivity : FragmentActivity(), RoutingFragment.OnGoInteractionListener
     override fun onGoInteraction(a: String, b: String) {
         supportFragmentManager.beginTransaction()
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            .replace(R.id.frameMain, TripFragment.newInstance(a, b))
+            .replace(R.id.frameMain, TripFragment(a, b))
             .commitAllowingStateLoss()
         header.visibility = View.GONE
     }

@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.glomadrian.loadingballs.BallView
@@ -18,20 +18,14 @@ import kotlinx.android.synthetic.main.fragment_trip.*
 import kotlinx.android.synthetic.main.fragment_trip.view.*
 import ru.zemlyanaya.getonbus.IOnBackPressed
 import ru.zemlyanaya.getonbus.R
-import ru.zemlyanaya.getonbus.RequestStatus
+import ru.zemlyanaya.getonbus.Status
+import ru.zemlyanaya.getonbus.mainactivity.ViewModelFactory
+import ru.zemlyanaya.getonbus.mainactivity.data.api.RetrofitBuilder
 
 
-private const val ARG_A = "a"
-private const val ARG_B = "b"
+class TripFragment(private val a: String, private val b: String) : Fragment(), IOnBackPressed {
 
-
-class TripFragment : Fragment(), IOnBackPressed {
-    private val viewModel: TripViewModel by activityViewModels()
-
-    private var a: String? = null
-    private var b: String? = null
-
-    private var possibleRoutes: ArrayList<String>? = arrayListOf()
+    private lateinit var viewModel: TripViewModel
 
     private lateinit var adapter: TripBusRecyclerAdapter
     private lateinit var recyclerView: RecyclerView
@@ -44,13 +38,33 @@ class TripFragment : Fragment(), IOnBackPressed {
         return butBack.isPressed
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            a = it.getString(ARG_A)
-            b = it.getString(ARG_B)
-        }
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        viewModel = ViewModelProviders.of(
+            this,
+            ViewModelFactory(
+                RetrofitBuilder.apiService,
+                null)
+        ).get(TripViewModel::class.java)
+
+        viewModel.possibleRoutes.observe(viewLifecycleOwner, Observer { resource ->
+            when(resource.status){
+                Status.LOADING -> showLoading()
+                Status.ERROR -> showError()
+                else -> showPossibleRoutes(resource.data)
+            }
+
+        })
+        viewModel.currentInstruction.observe(viewLifecycleOwner, Observer { resource ->
+            when(resource.status){
+                Status.LOADING -> showLoading()
+                Status.ERROR -> showError()
+                else -> showCurrentInstructions(resource.data!!)
+            }
+        })
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,18 +72,21 @@ class TripFragment : Fragment(), IOnBackPressed {
     ): View? {
         val layout = inflater.inflate(R.layout.fragment_trip, container, false)
         val butBack = layout.butBack
-        butBack.setOnClickListener { activity?.onBackPressed() }
+        butBack.setOnClickListener {
+            viewModel.cancelAllRequests()
+            activity?.onBackPressed()
+        }
 
         textNow = layout.textNow
         imageWalk = layout.imageWalk
         loadingView = layout.loadingView
 
         butNextStep = layout.butNextStep
-        butNextStep.setOnClickListener { viewModel.nextInstruction() }
+        butNextStep.setOnClickListener { viewModel.getPossibleRoutes() }
 
         recyclerView = layout.tripRecyclerView
         adapter = TripBusRecyclerAdapter {
-            viewModel.nextInstruction(it)
+            viewModel.getInstruction(it)
         }
         recyclerView.layoutManager = LinearLayoutManager(layout.context)
         recyclerView.adapter = adapter
@@ -77,26 +94,12 @@ class TripFragment : Fragment(), IOnBackPressed {
         return layout
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onStart() {
+        super.onStart()
 
-        viewModel.requestStatus.observe(viewLifecycleOwner, Observer { status ->
-            when(status){
-                RequestStatus.LOADING -> showLoading()
-                RequestStatus.ERROR -> showError()
-                else -> {}
-            }
-        })
-
-        viewModel.possibleRoutes.observe(viewLifecycleOwner, Observer { routes ->
-            possibleRoutes?.let {showPossibleRoutes(routes)}
-        })
-        viewModel.currentInstruction.observe(viewLifecycleOwner, Observer { instructions ->
-            showCurrentInstructions(instructions)
-        })
-
-        viewModel.getRoute(a.toString(), b.toString())
+        viewModel.getInstruction(42)
     }
+
 
     private fun showLoading(){
         imageWalk.visibility = View.GONE
@@ -118,7 +121,7 @@ class TripFragment : Fragment(), IOnBackPressed {
         builder.setView(view)
             .setCancelable(false)
             .setNeutralButton("Попробовать снова") { _, _ ->
-                viewModel.getRoute(a.toString(), b.toString())
+               viewModel.getPossibleRoutes()
             }
             .create()
             .show()
@@ -140,25 +143,6 @@ class TripFragment : Fragment(), IOnBackPressed {
         imageWalk.visibility = View.VISIBLE
         butNextStep.visibility = View.VISIBLE
         textNow.text = new
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param a point from.
-         * @param b point to.
-         * @return A new instance of fragment RootingFragment.
-         */
-        @JvmStatic
-        fun newInstance(a: String, b: String) =
-            TripFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_A, a)
-                    putString(ARG_B, b)
-                }
-            }
     }
 
 }

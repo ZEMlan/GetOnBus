@@ -1,66 +1,54 @@
 package ru.zemlyanaya.getonbus.mainactivity.trip
 
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
-import ru.zemlyanaya.getonbus.RequestStatus
-import ru.zemlyanaya.getonbus.mainactivity.model.RemoteRepository
+import ru.zemlyanaya.getonbus.Resource
+import ru.zemlyanaya.getonbus.mainactivity.data.repository.RemoteRepository
 import kotlin.coroutines.CoroutineContext
-import kotlin.random.Random
 
-class TripViewModel : ViewModel() {
+class TripViewModel(private val remoteRepository: RemoteRepository) : ViewModel() {
 
-    val requestStatus = MutableLiveData<RequestStatus>()
 
     private val parentJob = Job()
     private val coroutineContext: CoroutineContext
         get() = parentJob + Dispatchers.Default
     private val scope = CoroutineScope(coroutineContext)
 
-    private val repository = RemoteRepository()
+    val possibleRoutes = MediatorLiveData<Resource<List<String>>>()
+    val currentInstruction = MediatorLiveData<Resource<String>>()
 
-    val possibleRoutes = MutableLiveData<List<String>?>()
-    val currentInstruction = MutableLiveData<String>()
-
-    fun cancelAllRequests() = coroutineContext.cancel()
-
-    fun getRoute(a: String, b: String){
-        //TODO send request to the server
-        nextInstruction()
+    fun cancelAllRequests() {
+        coroutineContext.cancel()
     }
 
-    fun nextInstruction() {
-        requestStatus.value = RequestStatus.LOADING
-        scope.launch {
+    fun getPossibleRoutes() {
+        possibleRoutes.value = Resource.loading(data = null)
+
+        scope.launch(Dispatchers.IO) {
             Thread.sleep(2000L)
-            val routs: MutableList<String> = ArrayList()
-            val posts = repository.getPosts()
-            if(posts == null)
-                requestStatus.postValue(RequestStatus.ERROR)
-            else {
-                var i = Random.nextInt(2, 6)
-                while(i-- != 0){
-                    routs.add(posts[Random.nextInt(0, 50)].id.toString())
-                }
-                requestStatus.postValue(RequestStatus.SUCCESS)
-                possibleRoutes.postValue(routs as List<String>)
+            try {
+                possibleRoutes.postValue(
+                    Resource.success(data = remoteRepository.getNextInstruction()))
+            } catch (exception: Exception) {
+                possibleRoutes.postValue(
+                    Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
+            }
+        }
+    }
+    fun getInstruction(number: Int) {
+        currentInstruction.value = Resource.loading(data = null)
+
+        scope.launch(Dispatchers.IO) {
+            Thread.sleep(2000L)
+            try {
+                currentInstruction.postValue(
+                    Resource.success(data = remoteRepository.getNextInstruction(number)))
+            } catch (exception: Exception) {
+                currentInstruction.postValue(
+                    Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
             }
         }
     }
 
-    fun nextInstruction(number: Int){
-        requestStatus.value = RequestStatus.LOADING
-        scope.launch {
-            //TODO send request to the server
-            Thread.sleep(2000L)
-            val posts = repository.getPosts()
-            if (posts == null)
-                requestStatus.postValue(RequestStatus.ERROR)
-            else {
-                val max = posts.size
-                requestStatus.postValue(RequestStatus.SUCCESS)
-                currentInstruction.postValue(posts[Random.nextInt(0, max)].title)
-            }
-        }
-    }
 }

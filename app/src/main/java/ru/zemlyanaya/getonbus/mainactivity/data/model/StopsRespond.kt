@@ -1,4 +1,4 @@
-package ru.zemlyanaya.getonbus.mainactivity.model
+package ru.zemlyanaya.getonbus.mainactivity.data.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -8,7 +8,7 @@ import java.util.*
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder("Stops")
-class Stops {
+class StopsRespond {
     @JsonProperty("Stops")
     var stops: List<Stop>? = null
 
@@ -16,6 +16,10 @@ class Stops {
         val res: MutableList<String?> = ArrayList()
         stops?.forEach { stop -> res.add(stop.name) }
         return res
+    }
+
+    constructor(data: List<Stop>){
+        this.stops = data
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
