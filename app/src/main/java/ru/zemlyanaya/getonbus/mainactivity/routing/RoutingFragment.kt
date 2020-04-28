@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageButton
@@ -127,6 +128,13 @@ class RoutingFragment : Fragment(), IOnBackPressed {
     }
 
     private fun onGo(a: String, b: String ) {
+        val inputManager: InputMethodManager =
+            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(
+            activity?.currentFocus!!.windowToken,
+            InputMethodManager.HIDE_NOT_ALWAYS
+        )
+
         onGoListener?.onGoInteraction(a, b)
     }
 

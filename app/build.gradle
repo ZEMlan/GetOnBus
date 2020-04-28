@@ -50,6 +50,7 @@ dependencies {
     implementation "androidx.viewpager2:viewpager2:1.1.0-alpha01"
     implementation 'com.github.Chrisvin:FlipTabs:v1.0'
     implementation 'androidx.fragment:fragment-ktx:1.2.4'
+    implementation 'com.github.glomadrian:loadingballs:1.1@aar'
 
     //room
     implementation "androidx.room:room-runtime:2.2.5"

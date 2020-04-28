@@ -7,6 +7,12 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 import ru.zemlyanaya.getonbus.mainactivity.model.Stops
 
+enum class RequestStatus{
+    LOADING,
+    SUCCESS,
+    ERROR
+}
+
 interface IOnBackPressed {
     fun onBackPressed(): Boolean
 }

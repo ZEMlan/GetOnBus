@@ -51,7 +51,7 @@ class MainActivity : FragmentActivity(), RoutingFragment.OnGoInteractionListener
             val fragment = supportFragmentManager.findFragmentById(R.id.frameMain)
             if(fragment is RoutingFragment)
                 showAboutFragment()
-            else
+            else if(fragment is AboutFragment)
                 showRouteFragment()
         }
 
@@ -59,7 +59,7 @@ class MainActivity : FragmentActivity(), RoutingFragment.OnGoInteractionListener
             val fragment = supportFragmentManager.findFragmentById(R.id.frameMain)
             if(fragment is RoutingFragment)
                 showProfileFragment()
-            else
+            else if (fragment is ProfileFragment)
                 showRouteFragment()
         }
         butMap.setOnClickListener { showMapFragment() }
