@@ -109,7 +109,6 @@ class TripFragment : Fragment(), IOnBackPressed {
     }
 
     private fun showError(){
-        loadingView.stop()
         loadingView.visibility = View.GONE
 
         val builder = AlertDialog.Builder(context, R.style.AppTheme_DialogStyle)
