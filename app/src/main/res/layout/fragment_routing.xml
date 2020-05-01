@@ -44,7 +44,8 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:popupBackground="@color/backgroundColor"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textSize="17sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textview.MaterialTextView
@@ -74,7 +75,6 @@
 
         <AutoCompleteTextView
             android:id="@+id/textB"
-            style="@style/Base.Widget.MaterialComponents.AutoCompleteTextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -82,7 +82,8 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:popupBackground="@color/backgroundColor"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textSize="17sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

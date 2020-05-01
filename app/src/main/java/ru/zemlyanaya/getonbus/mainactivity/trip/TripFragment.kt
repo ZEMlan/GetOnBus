@@ -73,7 +73,6 @@ class TripFragment(private val a: String, private val b: String) : Fragment(), I
         val layout = inflater.inflate(R.layout.fragment_trip, container, false)
         val butBack = layout.butBack
         butBack.setOnClickListener {
-            viewModel.cancelAllRequests()
             activity?.onBackPressed()
         }
 

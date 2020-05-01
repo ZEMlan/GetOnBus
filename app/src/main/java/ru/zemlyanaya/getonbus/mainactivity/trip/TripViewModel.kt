@@ -12,20 +12,16 @@ class TripViewModel(private val remoteRepository: RemoteRepository) : ViewModel(
 
     private val parentJob = Job()
     private val coroutineContext: CoroutineContext
-        get() = parentJob + Dispatchers.Default
+        get() = parentJob + Dispatchers.IO
     private val scope = CoroutineScope(coroutineContext)
 
     val possibleRoutes = MediatorLiveData<Resource<List<String>>>()
     val currentInstruction = MediatorLiveData<Resource<String>>()
 
-    fun cancelAllRequests() {
-        coroutineContext.cancel()
-    }
-
     fun getPossibleRoutes() {
         possibleRoutes.value = Resource.loading(data = null)
 
-        scope.launch(Dispatchers.IO) {
+        scope.launch {
             Thread.sleep(2000L)
             try {
                 possibleRoutes.postValue(
@@ -36,10 +32,11 @@ class TripViewModel(private val remoteRepository: RemoteRepository) : ViewModel(
             }
         }
     }
+
     fun getInstruction(number: Int) {
         currentInstruction.value = Resource.loading(data = null)
 
-        scope.launch(Dispatchers.IO) {
+        scope.launch {
             Thread.sleep(2000L)
             try {
                 currentInstruction.postValue(
@@ -49,6 +46,11 @@ class TripViewModel(private val remoteRepository: RemoteRepository) : ViewModel(
                     Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
             }
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        coroutineContext.cancel()
     }
 
 }

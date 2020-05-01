@@ -11,9 +11,9 @@
     <ImageView
         android:id="@+id/image"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="296dp"
         android:foregroundTint="@color/backgroundColor"
-        android:scaleType="fitStart"
+        android:scaleType="fitXY"
         android:src="@drawable/header"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -21,17 +21,17 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
-    android:id="@+id/aboutLabel"
+        android:id="@+id/aboutLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="314dp"
+        android:layout_marginTop="16dp"
         android:letterSpacing="0.2"
         android:text="СКОРЕЙ В АВТОБУС!"
         android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/image" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/aboutText"

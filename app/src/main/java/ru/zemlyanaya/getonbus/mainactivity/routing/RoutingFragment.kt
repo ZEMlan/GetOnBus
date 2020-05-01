@@ -36,8 +36,7 @@ import ru.zemlyanaya.getonbus.mainactivity.database.FavRoute
 
 class RoutingFragment : Fragment(), IOnBackPressed {
 
-    private var isASelected = false
-    private var isBSelected = false
+    private var selectionTimes = 0 //increases each time user select point => should be at least 2
 
     private lateinit var viewModel: RoutingViewModel
 
@@ -45,7 +44,9 @@ class RoutingFragment : Fragment(), IOnBackPressed {
     private lateinit var recyclerView: RecyclerView
     private var favRoutes: ArrayList<FavRoute>? = arrayListOf()
 
-    private lateinit var stopsSearchAdapter: ArrayAdapter<String>
+    private lateinit var autoTextA: AutoCompleteTextView
+    private lateinit var autoTextB: AutoCompleteTextView
+
     private var stops = ArrayList<String>()
 
     private val icons = listOf(R.drawable.ic_heart, R.drawable.ic_home, R.drawable.ic_work)
@@ -68,7 +69,7 @@ class RoutingFragment : Fragment(), IOnBackPressed {
             val to = textB.text.toString()
             if (from == "" || to == "")
                 showError("Заполните все поля!")
-            else if (!isASelected or !isBSelected)
+            else if (selectionTimes < 2)
                 showError("Выберите точки из списка!")
             else
                 onGo(from, to)
@@ -85,17 +86,15 @@ class RoutingFragment : Fragment(), IOnBackPressed {
             viewModel.hasInternetConnection()
         }
 
-        val autoTextA = layout.textA
-        val autoTextB = layout.textB
-        stopsSearchAdapter = ArrayAdapter(layout.context, android.R.layout.select_dialog_item, stops)
-        autoTextA.setAdapter(stopsSearchAdapter)
-        autoTextA.setOnItemClickListener {_, _, _, _ -> isASelected = true}
-
-        autoTextB.setAdapter(stopsSearchAdapter)
-        autoTextB.setOnItemClickListener {_, _, _, _ -> isBSelected = true}
+        autoTextA = layout.textA
+        autoTextB = layout.textB
+        setUpAutoCompleteText(autoTextA)
+        setUpAutoCompleteText(autoTextB)
+        autoTextA.setOnItemClickListener {_, _, _, _ -> selectionTimes++ }
+        autoTextB.setOnItemClickListener {_, _, _, _ -> selectionTimes++ }
 
         adapter = FavRoutesRecyclerViewAdapter{
-            isBSelected = true
+            selectionTimes++
             textB.setText(it.destination)
         }
 
@@ -143,8 +142,10 @@ class RoutingFragment : Fragment(), IOnBackPressed {
     }
 
     private fun updateSearchList(){
-        stopsSearchAdapter.clear()
-        stopsSearchAdapter.addAll(stops)
+        (autoTextA.adapter as ArrayAdapter<String>).clear()
+        (autoTextB.adapter as ArrayAdapter<String>).clear()
+        //(autoTextA.adapter as ArrayAdapter<String>).addAll(stops)
+        (autoTextB.adapter as ArrayAdapter<String>).addAll(stops)
     }
 
     private fun getStops(data: List<StopsRespond.Stop>): ArrayList<String>{
@@ -160,6 +161,8 @@ class RoutingFragment : Fragment(), IOnBackPressed {
     }
 
     private fun onGo(a: String, b: String ) {
+        selectionTimes = 0
+
         val inputManager: InputMethodManager =
             activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(
@@ -215,7 +218,7 @@ class RoutingFragment : Fragment(), IOnBackPressed {
 
         val inputName: TextInputEditText = view.findViewById(R.id.textName)
         val inputTo: AutoCompleteTextView = view.findViewById(R.id.textTo)
-        inputTo.setAdapter(stopsSearchAdapter)
+        setUpAutoCompleteText(inputTo)
         val inputIcon: ImageButton = view.findViewById(R.id.dialogIcon)
         var i = 0
         inputIcon.setOnClickListener {
@@ -252,7 +255,7 @@ class RoutingFragment : Fragment(), IOnBackPressed {
         val inputName: TextInputEditText = view.findViewById(R.id.textName)
         inputName.setText(route.name)
         val inputTo: AutoCompleteTextView = view.findViewById(R.id.textTo)
-        inputTo.setAdapter(stopsSearchAdapter)
+        setUpAutoCompleteText(inputTo)
         inputTo.setText(route.destination)
         val inputIcon: ImageButton = view.findViewById(R.id.dialogIcon)
         inputIcon.setImageResource(route.icon)
@@ -304,6 +307,14 @@ class RoutingFragment : Fragment(), IOnBackPressed {
                     .show()
             }
         return builder.create()
+    }
+
+    private fun setUpAutoCompleteText(view: AutoCompleteTextView){
+        view.setAdapter(ArrayAdapter(requireContext(), android.R.layout.select_dialog_item, stops))
+        view.threshold = 1
+        view.setOnFocusChangeListener { v, hasFocus ->
+            if(hasFocus && (v as AutoCompleteTextView).text.isBlank()) v.showDropDown()
+        }
     }
 
     private fun showError(e: String){
