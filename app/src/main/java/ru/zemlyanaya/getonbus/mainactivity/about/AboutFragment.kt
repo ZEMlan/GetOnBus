@@ -47,7 +47,8 @@ class AboutFragment : Fragment(), IOnBackPressed {
         //val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.UK)
 
         val textVersion = layout.textVersion
-        textVersion.text = "Версия ${BuildConfig.VERSION_NAME}(beta-0.4) от 01.05.2020"
+        textVersion.text = "Версия ${BuildConfig.VERSION_NAME}(beta-0.4) от 06.05.2020\n" +
+                "Проект начат в рамках программы ЮнIT Урал"
 
         return layout
     }

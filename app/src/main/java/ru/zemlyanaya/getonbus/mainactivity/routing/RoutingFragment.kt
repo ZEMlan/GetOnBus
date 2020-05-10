@@ -259,7 +259,7 @@ class RoutingFragment : Fragment(), IOnBackPressed {
         inputTo.setText(route.destination)
         val inputIcon: ImageButton = view.findViewById(R.id.dialogIcon)
         inputIcon.setImageResource(route.icon)
-        var i = 0
+        var i = icons.indexOf(route.icon)
         inputIcon.setOnClickListener {
             i = if(i == 2) 0 else ++i
             inputIcon.setImageResource(icons[i])
