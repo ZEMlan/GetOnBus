@@ -131,7 +131,8 @@ class RoutingFragment : Fragment(), IOnBackPressed {
 
         viewModel.getStops().observe(viewLifecycleOwner, Observer { resource ->
             when(resource.status){
-                Status.ERROR -> showWarning()
+                Status.ERROR -> showWarning("Не удалось подключиться к серверу! Приложение не будет работать.\n\n" +
+                        "Проверьте интернет-соединение и перезагрузите приложение.")
                 Status.SUCCESS -> {
                     this.stops = getStops(resource.data!!.stops!!)
                     updateSearchList()
@@ -140,6 +141,7 @@ class RoutingFragment : Fragment(), IOnBackPressed {
             }
         })
     }
+
 
     private fun updateSearchList(){
         (autoTextA.adapter as ArrayAdapter<String>).clear()
@@ -187,13 +189,12 @@ class RoutingFragment : Fragment(), IOnBackPressed {
         onGoListener = null
     }
 
-    private fun showWarning(){
+    private fun showWarning(message: String){
         val builder = androidx.appcompat.app.AlertDialog.Builder(layoutInflater.context)
-        builder.setTitle("ПРЕДУПРЕЖДЕНИЕ")
+        builder.setTitle("Сообщение!")
             .setIcon(R.drawable.ic_warning)
-            .setMessage("Не удалось подключиться к серверу! Приложение не будет работать.\n\n" +
-                    "Проверьте интернет-соединение и перезагрузите приложение.")
-            .setPositiveButton("Понятно") { dialog, _ -> run { dialog.cancel() } }
+            .setMessage(message)
+            .setPositiveButton("OK") { dialog, _ -> run { dialog.cancel() } }
             .create()
             .show()
     }
@@ -295,7 +296,7 @@ class RoutingFragment : Fragment(), IOnBackPressed {
             ) {_, _ ->
                 viewModel.delete(route)
                 Snackbar
-                    .make(recyclerView, "Приключение успешно забыто.", Snackbar.LENGTH_SHORT)
+                    .make(recyclerView, "Приключение забыто.", Snackbar.LENGTH_SHORT)
                     .setAction(
                     "ВЕРНУТЬ"
                 )  {

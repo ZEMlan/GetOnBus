@@ -167,12 +167,25 @@
                 android:id="@+id/textVersion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="128dp"
+                android:layout_marginTop="56dp"
                 android:layout_marginBottom="8dp"
                 android:text="Версия n.n. от"
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/gitRepText" />
+
+            <TextView
+                android:id="@+id/gitRepText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="56dp"
+                android:text="@string/gitRep"
+                android:textColor="@color/textAccentColor"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView10" />
 

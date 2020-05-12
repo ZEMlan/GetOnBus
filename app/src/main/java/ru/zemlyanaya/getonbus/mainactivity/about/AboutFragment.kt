@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,8 +48,12 @@ class AboutFragment : Fragment(), IOnBackPressed {
         //val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.UK)
 
         val textVersion = layout.textVersion
-        textVersion.text = "Версия ${BuildConfig.VERSION_NAME}(beta-0.5) от 10.05.2020\n" +
-                "Проект начат в рамках программы ЮнIT Урал"
+        textVersion.text = "Версия ${BuildConfig.VERSION_NAME}(beta-0.5) от 12.05.2020\n" +
+                "Проект начат в рамках программы ЮнIT Урал.\n\n" +
+                "Команда благодарит всех принявших участие в открытом бета-тестировании!"
+
+        val gitLink = layout.gitRepText
+        gitLink.movementMethod = LinkMovementMethod.getInstance()
 
         return layout
     }
