@@ -7,12 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.github.glomadrian.loadingballs.BallView
 import com.google.android.material.button.MaterialButton
 import kotlinx.android.synthetic.main.fragment_trip.*
 import kotlinx.android.synthetic.main.fragment_trip.view.*
@@ -32,7 +32,7 @@ class TripFragment(private val a: String, private val b: String) : Fragment(), I
     private lateinit var textNow: TextView
     private lateinit var butNextStep: MaterialButton
     private lateinit var imageWalk: ImageView
-    private lateinit var loadingView: BallView
+    private lateinit var loadingView: ContentLoadingProgressBar
 
     override fun onBackPressed(): Boolean {
         return butBack.isPressed

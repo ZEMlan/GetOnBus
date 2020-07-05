@@ -100,27 +100,20 @@
         tools:visibility="invisible" />
 
 
-    <com.github.glomadrian.loadingballs.BallView
+    <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/loadingView"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_gravity="center"
         android:layout_margin="30dp"
         android:layout_marginTop="100dp"
-        android:visibility="gone"
-        lib:ball_colors="@array/colors"
-        lib:balls="3"
-        lib:enable_size_animation="true"
+        android:indeterminate="true"
+        android:visibility="visible"
         lib:layout_constraintBottom_toBottomOf="parent"
         lib:layout_constraintEnd_toEndOf="parent"
         lib:layout_constraintHorizontal_bias="0.498"
         lib:layout_constraintStart_toStartOf="parent"
         lib:layout_constraintTop_toBottomOf="@+id/textView"
-        lib:layout_constraintVertical_bias="0.362"
-        lib:max_ball_size="20dp"
-        lib:min_ball_size="10dp"
-        lib:movement_cycle_time="2500"
-        lib:size_cycle_time="800"
-        tools:visibility="invisible" />
+        lib:layout_constraintVertical_bias="0.362" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
