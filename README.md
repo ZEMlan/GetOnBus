@@ -1,9 +1,9 @@
 # GetOnBus
 Проект выполнен в рамках программы ЮнIT Урал 2019/20 командой team!!.name <p> <p>
-<kbd><img src="/readme/scr1.jpg" width="200" height="400"></kbd> 
-<kbd><img src="/readme/scr2.jpg" width="200" height="400"></kbd>
-<kbd><img src="/readme/scr3.jpg" width="200" height="400"></kbd>
-<kbd><img src="/readme/scr4.jpg" width="200" height="400"></kbd>
+<kbd><img src="/readme/scr1.jpg" width="160" height="320"></kbd> 
+<kbd><img src="/readme/scr2.jpg" width="160" height="320"></kbd>
+<kbd><img src="/readme/scr3.jpg" width="160" height="320"></kbd>
+<kbd><img src="/readme/scr4.jpg" width="160" height="320"></kbd>
   
 Current version: `0.9(beta-0.5-no-server)`.
   
