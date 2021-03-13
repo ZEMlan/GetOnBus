@@ -1,5 +1,6 @@
 # GetOnBus
-Проект выполнен в рамках программы ЮнIT Урал 2019/20 командой team!!.name <p> <p>
+--frozen--
+Проект начат в рамках программы ЮнIT Урал 2019/20 командой team!!.name <p> <p>
 <kbd><img src="/readme/scr1.jpg" width="160" height="320"></kbd> 
 <kbd><img src="/readme/scr2.jpg" width="160" height="320"></kbd>
 <kbd><img src="/readme/scr3.jpg" width="160" height="320"></kbd>
